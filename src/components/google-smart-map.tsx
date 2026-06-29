@@ -56,6 +56,12 @@ type RouteSnapshot = {
   distanceMeters: number | null;
 };
 
+function hasCoordinate(
+  coordinate: { lat: number; lng: number } | null,
+): coordinate is { lat: number; lng: number } {
+  return coordinate !== null;
+}
+
 export function GoogleSmartMap({
   zones,
   activeZoneSlug,
@@ -92,7 +98,7 @@ export function GoogleSmartMap({
   );
 
   const activeRoutePoints = useMemo(
-    () => activeZone?.stores.map((item) => item.coordinate).filter(Boolean) ?? [],
+    () => activeZone?.stores.map((item) => item.coordinate).filter(hasCoordinate) ?? [],
     [activeZone],
   );
   const preferredRoutePoints = customRoutePoints?.length ? customRoutePoints : activeRoutePoints;
