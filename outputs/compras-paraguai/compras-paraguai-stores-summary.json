@@ -1,0 +1,11 @@
+{
+  "extracted_at": "2026-06-28T22:04:40.167Z",
+  "source_url": "https://www.comprasparaguai.com.br/lojas/",
+  "total_stores_found": 60,
+  "total_stores_exported": 50,
+  "output_files": {
+    "raw": "/Users/mdc/Documents/Codex/frontier-atlas/outputs/compras-paraguai/compras-paraguai-stores-raw.json",
+    "frontier_json": "/Users/mdc/Documents/Codex/frontier-atlas/outputs/compras-paraguai/compras-paraguai-stores-frontier.json",
+    "frontier_csv": "/Users/mdc/Documents/Codex/frontier-atlas/outputs/compras-paraguai/compras-paraguai-stores-frontier.csv"
+  }
+}

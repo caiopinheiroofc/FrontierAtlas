@@ -5,12 +5,66 @@ import Link from "next/link";
 import { SearchInput } from "@/components/search-input";
 import { GuideCard } from "@/components/guide-card";
 import { SupplierCard } from "@/components/supplier-card";
-import { searchAll } from "@/lib/data";
+import { type Category, type Guide, type Store, type Supplier } from "@/lib/data";
 
-export function SearchResults({ initialQuery = "" }: { initialQuery?: string }) {
+export function SearchResults({
+  initialQuery = "",
+  stores,
+  guides,
+  suppliers,
+  categories,
+}: {
+  initialQuery?: string;
+  stores: Store[];
+  guides: Guide[];
+  suppliers: Supplier[];
+  categories: Category[];
+}) {
   const [query, setQuery] = useState(initialQuery);
 
-  const results = useMemo(() => searchAll(query), [query]);
+  const results = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+
+    if (!normalized) {
+      return {
+        stores: stores.slice(0, 6),
+        guides: guides.slice(0, 4),
+        suppliers: suppliers.slice(0, 4),
+        categories: categories.slice(0, 6),
+      };
+    }
+
+    const includesText = (values: string[]) =>
+      values.some((value) => value.toLowerCase().includes(normalized));
+
+    return {
+      stores: stores.filter((store) =>
+        includesText([
+          store.name,
+          store.shortDescription,
+          store.fullDescription,
+          store.city,
+          ...store.tags,
+          ...store.categorySlugs,
+          ...store.missionSlugs,
+        ]),
+      ),
+      guides: guides.filter((guide) =>
+        includesText([guide.title, guide.summary, guide.category, ...guide.content]),
+      ),
+      suppliers: suppliers.filter((supplier) =>
+        includesText([
+          supplier.name,
+          supplier.segment,
+          supplier.description,
+          supplier.frontierNote,
+        ]),
+      ),
+      categories: categories.filter((category) =>
+        includesText([category.name, category.description, category.slug]),
+      ),
+    };
+  }, [categories, guides, query, stores, suppliers]);
 
   return (
     <div className="space-y-8">

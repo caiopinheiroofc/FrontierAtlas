@@ -1,9 +1,10 @@
 import { AppShell } from "@/components/app-shell";
 import { GuideCard } from "@/components/guide-card";
 import { SectionHeading } from "@/components/section-heading";
-import { guides } from "@/lib/data";
+import { getGuides } from "@/lib/frontier-data";
 
-export default function GuiasPage() {
+export default async function GuiasPage() {
+  const guides = await getGuides();
   return (
     <AppShell
       title="Guias rápidos para atravessar melhor."

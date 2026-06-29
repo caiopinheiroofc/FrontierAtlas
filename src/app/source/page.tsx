@@ -2,9 +2,10 @@ import { Lock, ShieldCheck, Star } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { SectionHeading } from "@/components/section-heading";
 import { SupplierCard } from "@/components/supplier-card";
-import { suppliers } from "@/lib/data";
+import { getSuppliers } from "@/lib/frontier-data";
 
-export default function SourcePage() {
+export default async function SourcePage() {
+  const suppliers = await getSuppliers();
   return (
     <AppShell
       title="Source: fornecedores e atalhos de margem."

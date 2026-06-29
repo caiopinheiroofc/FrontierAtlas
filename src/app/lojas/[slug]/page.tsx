@@ -5,7 +5,8 @@ import { AppShell } from "@/components/app-shell";
 import { FrontierScore } from "@/components/frontier-score";
 import { SectionHeading } from "@/components/section-heading";
 import { StoreCard } from "@/components/store-card";
-import { averageScore, getRelatedStores, getStoreBySlug } from "@/lib/data";
+import { averageScore } from "@/lib/data";
+import { getRelatedStores, getStoreBySlug } from "@/lib/frontier-data";
 
 export default async function StoreDetailPage({
   params,
@@ -13,13 +14,13 @@ export default async function StoreDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const store = getStoreBySlug(slug);
+  const store = await getStoreBySlug(slug);
 
   if (!store) {
     notFound();
   }
 
-  const related = getRelatedStores(store);
+  const related = await getRelatedStores(store);
 
   return (
     <AppShell

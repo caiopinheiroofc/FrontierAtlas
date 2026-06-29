@@ -26,6 +26,9 @@ export function AppShell({
           </Link>
 
           <div className="hidden items-center gap-2 xl:flex">
+            <Link className="rounded-full px-4 py-2 text-sm text-white/72 transition hover:bg-white/8 hover:text-white" href="/mapa">
+              Mapa
+            </Link>
             <Link className="rounded-full px-4 py-2 text-sm text-white/72 transition hover:bg-white/8 hover:text-white" href="/explorar">
               Explorar
             </Link>

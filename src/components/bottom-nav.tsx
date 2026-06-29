@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, Map, Radar, Search, Store } from "lucide-react";
+import { Compass, Map, MapPinned, Radar, Search, Store } from "lucide-react";
 
 const items = [
   { href: "/", label: "Home", icon: Compass },
+  { href: "/mapa", label: "Mapa", icon: MapPinned },
   { href: "/explorar", label: "Explorar", icon: Map },
   { href: "/guias", label: "Guias", icon: Radar },
   { href: "/source", label: "Source", icon: Store },
@@ -17,7 +18,7 @@ export function BottomNav() {
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#09110c]/90 px-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-3 backdrop-blur xl:hidden">
-      <div className="mx-auto grid max-w-md grid-cols-5 gap-2 rounded-3xl border border-white/10 bg-white/5 p-2 shadow-[0_20px_80px_-30px_rgba(39,215,108,0.4)]">
+      <div className="mx-auto grid max-w-md grid-cols-6 gap-2 rounded-3xl border border-white/10 bg-white/5 p-2 shadow-[0_20px_80px_-30px_rgba(39,215,108,0.4)]">
         {items.map(({ href, label, icon: Icon }) => {
           const active = pathname === href;
           return (

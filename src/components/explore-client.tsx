@@ -3,12 +3,16 @@
 import { useMemo, useState } from "react";
 import { SearchInput } from "@/components/search-input";
 import { StoreCard } from "@/components/store-card";
-import { categories, stores } from "@/lib/data";
+import { type Category, type Store } from "@/lib/data";
 
 export function ExploreClient({
   initialMission,
+  stores,
+  categories,
 }: {
   initialMission?: string;
+  stores: Store[];
+  categories: Category[];
 }) {
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("todas");
@@ -22,7 +26,7 @@ export function ExploreClient({
       const matchesQuery = !query || text.includes(query.toLowerCase());
       return matchesCategory && matchesMission && matchesQuery;
     });
-  }, [initialMission, query, selectedCategory]);
+  }, [initialMission, query, selectedCategory, stores]);
 
   return (
     <div className="space-y-6">

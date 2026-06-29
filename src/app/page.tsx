@@ -1,14 +1,20 @@
 import Link from "next/link";
-import { ArrowRight, Lock, MapPinned, Radar, Sparkles, Store } from "lucide-react";
+import { ArrowRight, Lock, MapPinned, Radar, Route, Sparkles, Store } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { GuideCard } from "@/components/guide-card";
 import { MissionCard } from "@/components/mission-card";
 import { SearchInput } from "@/components/search-input";
 import { SectionHeading } from "@/components/section-heading";
 import { StoreCard } from "@/components/store-card";
-import { categories, guides, missions, premiumCollections, stores, weeklyOpportunities } from "@/lib/data";
+import { missions, premiumCollections, weeklyOpportunities } from "@/lib/data";
+import { getCategories, getGuides, getStores } from "@/lib/frontier-data";
 
-export default function Home() {
+export default async function Home() {
+  const [stores, guides, categories] = await Promise.all([
+    getStores(),
+    getGuides(),
+    getCategories(),
+  ]);
   const featuredStores = stores.filter((store) => store.featured).slice(0, 6);
   const quickGuides = guides.slice(0, 4);
 
@@ -35,6 +41,9 @@ export default function Home() {
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Link href="/explorar" className="rounded-full bg-[#d9ff1f] px-5 py-3 text-center text-sm font-semibold text-[#0a0a0a] transition hover:bg-[#c8ee16]">
               Explorar lojas
+            </Link>
+            <Link href="/mapa" className="rounded-full border border-white/12 bg-white/6 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10">
+              Ver mapa inteligente
             </Link>
             <Link href="/guias" className="rounded-full border border-white/12 bg-white/6 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10">
               Ver guias rápidos
@@ -162,6 +171,20 @@ export default function Home() {
               {category.name}
             </span>
           ))}
+        </div>
+        <div className="mt-6 rounded-[28px] bg-[#0c1510] p-5 text-white shadow-[0_35px_110px_-55px_rgba(39,215,108,0.45)]">
+          <div className="flex items-center gap-2 text-[#d9ff1f]">
+            <Route className="h-4 w-4" />
+            <p className="text-xs font-black uppercase tracking-[0.18em]">Mapa inteligente</p>
+          </div>
+          <h3 className="mt-3 text-2xl font-black tracking-[-0.03em]">A cidade agora já pode ser lida por eixos reais de compra.</h3>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/74">
+            Organizamos as lojas visíveis por polos como Shopping China, Jebai Center, Lai Lai Center e San Blás. Isso transforma o Frontier Atlas em assistência de rota, não só em lista de lugares.
+          </p>
+          <Link href="/mapa" className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#d9ff1f] px-5 py-3 text-sm font-semibold text-[#0a0a0a] transition hover:bg-[#c8ee16]">
+            Abrir mapa inteligente
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </section>
     </AppShell>

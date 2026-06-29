@@ -20,6 +20,7 @@ O projeto foi desenhado para validar vendas rapidamente com uma experiência mob
 - TypeScript
 - Tailwind CSS
 - Lucide React
+- Supabase
 
 ## Rodando localmente
 
@@ -44,3 +45,14 @@ pnpm start
 - proteger a área `Source`
 - instalar analytics
 - publicar na Vercel
+
+## Supabase
+
+1. Copie `.env.example` para `.env.local`
+2. Preencha:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+3. Rode o schema em `supabase/schema.sql`
+4. Alimente as tabelas usando a planilha mestre e o script `import-frontier-data.ts`
+
+Sem essas variáveis, o app continua funcionando com fallback local em `src/lib/data.ts`.
