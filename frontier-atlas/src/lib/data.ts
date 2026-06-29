@@ -9,6 +9,19 @@ export type ScoreBreakdown = {
   wholesale: number;
 };
 
+export type Coordinates = {
+  lat: number;
+  lng: number;
+};
+
+export type RouteSegment = {
+  from: string;
+  to: string;
+  distance: number; // em km
+  duration: number; // em minutos
+  difficulty: 'easy' | 'moderate' | 'hard';
+};
+
 export type Category = {
   id: string;
   name: string;
@@ -30,6 +43,7 @@ export type Store = {
   city: string;
   country: string;
   address: string;
+  coordinates: Coordinates;
   googleMapsUrl: string;
   instagramUrl?: string;
   websiteUrl?: string;
@@ -37,6 +51,7 @@ export type Store = {
   openingHours: string;
   paymentMethods: string[];
   parkingInfo: string;
+  parkingScore: number; // 0-10
   coverAccent: string;
   logoText: string;
   tags: string[];
@@ -46,6 +61,9 @@ export type Store = {
   reviewSummary: string;
   worthIt: string;
   recommendedProducts: string[];
+  difficulty: 'easy' | 'moderate' | 'hard'; // dificuldade de compra
+  crowdLevel: 'low' | 'medium' | 'high'; // nível de aglomeração
+  bestTimeToVisit: string; // melhor horário
 };
 
 export type Guide = {
@@ -85,6 +103,17 @@ export type Mission = {
   accent: string;
 };
 
+export type SmartRoute = {
+  id: string;
+  missionSlug: string;
+  stores: Store[];
+  totalDistance: number;
+  estimatedTime: number;
+  segments: RouteSegment[];
+  difficulty: 'easy' | 'moderate' | 'hard';
+  description: string;
+};
+
 export const categories: Category[] = [
   { id: "cat-tech", name: "Tecnologia", slug: "tecnologia", description: "Eletrônicos, celulares e acessórios.", type: "store", icon: "Smartphone", accent: "from-cyan-400 to-sky-600" },
   { id: "cat-perf", name: "Perfumes", slug: "perfumes", description: "Fragrâncias, cosméticos e beleza.", type: "store", icon: "Sparkles", accent: "from-fuchsia-400 to-rose-500" },
@@ -96,7 +125,6 @@ export const categories: Category[] = [
   { id: "cat-hotels", name: "Hotéis", slug: "hoteis", description: "Base segura para dormir e guardar compras.", type: "store", icon: "Hotel", accent: "from-slate-400 to-slate-700" },
   { id: "cat-exchange", name: "Câmbio", slug: "cambio", description: "Casas de câmbio e meios de pagamento.", type: "store", icon: "BadgeDollarSign", accent: "from-emerald-400 to-teal-600" },
   { id: "cat-wholesale", name: "Atacado", slug: "atacado", description: "Quem compra volume e revende.", type: "store", icon: "Boxes", accent: "from-yellow-300 to-lime-500" },
-  { id: "cat-first", name: "Primeira Viagem", slug: "primeira-viagem", description: "Tudo para quem está indo pela primeira vez.", type: "mission", icon: "Compass", accent: "from-blue-400 to-indigo-500" },
 ];
 
 export const missions: Mission[] = [
@@ -116,12 +144,13 @@ export const stores: Store[] = [
     name: "Shopping China",
     slug: "shopping-china",
     shortDescription: "Gigante para eletrônicos, bebidas, perfumaria e compras de ticket alto.",
-    fullDescription: "Uma das paradas mais conhecidas de Ciudad del Este para quem quer variedade ampla, boa estrutura e uma compra mais previsível. Funciona bem para primeira viagem porque concentra categorias importantes em um único lugar.",
+    fullDescription: "Uma das paradas mais conhecidas de Ciudad del Este para quem quer variedade ampla, boa estrutura e uma compra mais previsível. Funciona bem para primeira viagem porque centraliza muitas categorias.",
     categorySlugs: ["tecnologia", "perfumes", "casa"],
     missionSlugs: ["eletronicos", "perfumes", "primeira-viagem"],
     city: "Ciudad del Este",
     country: "Paraguai",
     address: "Avenida Monseñor Rodríguez, Ciudad del Este",
+    coordinates: { lat: -25.5095, lng: -54.6122 },
     googleMapsUrl: "https://maps.google.com/?q=Shopping+China+Ciudad+del+Este",
     instagramUrl: "https://instagram.com/shoppingchina",
     websiteUrl: "https://shoppingchina.com.py",
@@ -129,6 +158,7 @@ export const stores: Store[] = [
     openingHours: "Seg a sáb, 7h às 16h30",
     paymentMethods: ["Pix via parceiros", "Cartão", "Dinheiro", "Dólar"],
     parkingInfo: "Estacionamento amplo com fluxo intenso em horários de pico.",
+    parkingScore: 8.5,
     coverAccent: "from-zinc-900 via-emerald-950 to-emerald-600",
     logoText: "SC",
     tags: ["premium", "primeira viagem", "eletrônicos", "perfumes"],
@@ -138,6 +168,9 @@ export const stores: Store[] = [
     reviewSummary: "Excelente para centralizar compras com segurança e variedade.",
     worthIt: "Vale muito a pena para quem quer resolver várias frentes em uma única parada.",
     recommendedProducts: ["iPhone", "Whisky", "Perfumes importados", "Fones premium"],
+    difficulty: "easy",
+    crowdLevel: "high",
+    bestTimeToVisit: "7h-9h (antes do pico)",
   },
   {
     id: "store-cell-shop",
@@ -150,6 +183,7 @@ export const stores: Store[] = [
     city: "Ciudad del Este",
     country: "Paraguai",
     address: "Shopping Paris, Ciudad del Este",
+    coordinates: { lat: -25.5089, lng: -54.6135 },
     googleMapsUrl: "https://maps.google.com/?q=Cell+Shop+Ciudad+del+Este",
     instagramUrl: "https://instagram.com/cellshopimportados",
     websiteUrl: "https://cellshop.com.py",
@@ -157,6 +191,7 @@ export const stores: Store[] = [
     openingHours: "Seg a sáb, 7h às 16h",
     paymentMethods: ["Cartão", "Dinheiro", "Dólar"],
     parkingInfo: "Estacionamento coberto no complexo.",
+    parkingScore: 8.0,
     coverAccent: "from-sky-950 via-sky-700 to-cyan-400",
     logoText: "CS",
     tags: ["iphone", "notebook", "apple", "confiança"],
@@ -166,6 +201,9 @@ export const stores: Store[] = [
     reviewSummary: "Compra mais confortável para tecnologia e acessórios de giro rápido.",
     worthIt: "Vale quando o foco é confiança e suporte visual para comprar melhor.",
     recommendedProducts: ["iPhone", "Apple Watch", "Fones Bluetooth", "Acessórios MagSafe"],
+    difficulty: "easy",
+    crowdLevel: "medium",
+    bestTimeToVisit: "8h-10h ou 14h-15h",
   },
   {
     id: "store-nissei",
@@ -178,12 +216,14 @@ export const stores: Store[] = [
     city: "Ciudad del Este",
     country: "Paraguai",
     address: "Centro de Ciudad del Este",
+    coordinates: { lat: -25.5110, lng: -54.6100 },
     googleMapsUrl: "https://maps.google.com/?q=Nissei+Ciudad+del+Este",
     websiteUrl: "https://nissei.com.py",
     whatsapp: "+595000000003",
     openingHours: "Seg a sáb, 7h às 15h30",
     paymentMethods: ["Cartão", "Dinheiro", "Dólar", "Guarani"],
     parkingInfo: "Varia conforme a unidade; vale planejar a chegada cedo.",
+    parkingScore: 7.0,
     coverAccent: "from-neutral-900 via-zinc-700 to-lime-400",
     logoText: "NI",
     tags: ["mix amplo", "casa", "eletrônicos"],
@@ -193,6 +233,9 @@ export const stores: Store[] = [
     reviewSummary: "Boa relação entre variedade, preço e praticidade.",
     worthIt: "Vale como loja coringa para encaixar na rota do dia.",
     recommendedProducts: ["Eletroportáteis", "Acessórios tech", "Itens de casa"],
+    difficulty: "moderate",
+    crowdLevel: "medium",
+    bestTimeToVisit: "7h-8h (horário de abertura)",
   },
   {
     id: "store-mega-eletronicos",
@@ -205,12 +248,14 @@ export const stores: Store[] = [
     city: "Ciudad del Este",
     country: "Paraguai",
     address: "Microcentro de Ciudad del Este",
+    coordinates: { lat: -25.5125, lng: -54.6145 },
     googleMapsUrl: "https://maps.google.com/?q=Mega+Eletronicos+Ciudad+del+Este",
     instagramUrl: "https://instagram.com/megaeletronicos",
     whatsapp: "+595000000004",
     openingHours: "Seg a sáb, 7h às 16h",
     paymentMethods: ["Dinheiro", "Dólar", "Transferência"],
     parkingInfo: "Estacionamento mais limitado; ideal ir cedo.",
+    parkingScore: 6.5,
     coverAccent: "from-emerald-950 via-emerald-700 to-lime-400",
     logoText: "ME",
     tags: ["revenda", "preço", "eletrônicos"],
@@ -220,139 +265,9 @@ export const stores: Store[] = [
     reviewSummary: "Mais atrativa para quem quer margem e compra com velocidade.",
     worthIt: "Vale quando o preço pesa mais que a experiência premium.",
     recommendedProducts: ["Smartphones Android", "Caixas de som", "Acessórios", "Informática"],
-  },
-  {
-    id: "store-new-zone",
-    name: "New Zone",
-    slug: "new-zone",
-    shortDescription: "Mix interessante para eletrônicos e presentes com navegação simples.",
-    fullDescription: "Boa alternativa para quem quer fugir dos nomes mais óbvios sem perder sensação de estrutura. Costuma funcionar melhor em compras pontuais e comparação de oportunidade.",
-    categorySlugs: ["tecnologia", "games"],
-    missionSlugs: ["eletronicos", "games"],
-    city: "Ciudad del Este",
-    country: "Paraguai",
-    address: "Galeria no centro de CDE",
-    googleMapsUrl: "https://maps.google.com/?q=New+Zone+Ciudad+del+Este",
-    whatsapp: "+595000000005",
-    openingHours: "Seg a sáb, 7h às 15h30",
-    paymentMethods: ["Dinheiro", "Cartão"],
-    parkingInfo: "Rotatividade rápida em estacionamentos próximos.",
-    coverAccent: "from-indigo-950 via-indigo-700 to-cyan-400",
-    logoText: "NZ",
-    tags: ["tech", "games", "oportunidade"],
-    featured: false,
-    premium: false,
-    score: { price: 8.3, trust: 7.9, variety: 7.8, service: 7.7, warranty: 7.3, location: 8.0, parking: 6.8, wholesale: 7.4 },
-    reviewSummary: "Boa para caça de oportunidade e compra complementar.",
-    worthIt: "Vale se estiver no seu trajeto e houver item específico na lista.",
-    recommendedProducts: ["Fones", "Periféricos", "Itens gamer"],
-  },
-  {
-    id: "store-roma-shopping",
-    name: "Roma Shopping",
-    slug: "roma-shopping",
-    shortDescription: "Parada equilibrada para tecnologia, presentes e categorias variadas.",
-    fullDescription: "A Roma encaixa bem no roteiro de quem quer explorar opções além dos grandes ícones, com boa combinação entre variedade e circulação interna.",
-    categorySlugs: ["tecnologia", "moda", "casa"],
-    missionSlugs: ["primeira-viagem", "casa"],
-    city: "Ciudad del Este",
-    country: "Paraguai",
-    address: "Área central, Ciudad del Este",
-    googleMapsUrl: "https://maps.google.com/?q=Roma+Shopping+Ciudad+del+Este",
-    whatsapp: "+595000000006",
-    openingHours: "Seg a sáb, 7h às 16h",
-    paymentMethods: ["Cartão", "Dinheiro", "Dólar"],
-    parkingInfo: "Estacionamento disponível conforme a unidade.",
-    coverAccent: "from-red-950 via-red-700 to-orange-400",
-    logoText: "RO",
-    tags: ["variedade", "presente", "shopping"],
-    featured: false,
-    premium: false,
-    score: { price: 7.9, trust: 8.0, variety: 8.2, service: 7.8, warranty: 7.4, location: 8.1, parking: 7.1, wholesale: 6.5 },
-    reviewSummary: "Boa parada de suporte para rotas mais amplas.",
-    worthIt: "Vale como complemento de missão, não como única parada.",
-    recommendedProducts: ["Presentes", "Acessórios", "Itens de casa"],
-  },
-  {
-    id: "store-hb-games",
-    name: "HB Games",
-    slug: "hb-games",
-    shortDescription: "Especializada em consoles, jogos e acessórios gamer.",
-    fullDescription: "Loja de nicho que faz sentido quando a missão é games. Ajuda a encontrar acessórios específicos e dá mais precisão para quem não quer misturar essa compra com varejo generalista.",
-    categorySlugs: ["games", "tecnologia"],
-    missionSlugs: ["games", "revenda"],
-    city: "Ciudad del Este",
-    country: "Paraguai",
-    address: "Centro comercial de CDE",
-    googleMapsUrl: "https://maps.google.com/?q=HB+Games+Ciudad+del+Este",
-    instagramUrl: "https://instagram.com/hbgamespy",
-    whatsapp: "+595000000007",
-    openingHours: "Seg a sáb, 7h30 às 15h30",
-    paymentMethods: ["Dinheiro", "Dólar", "Cartão"],
-    parkingInfo: "Estacionamento rotativo próximo.",
-    coverAccent: "from-violet-950 via-violet-700 to-fuchsia-500",
-    logoText: "HB",
-    tags: ["playstation", "nintendo", "acessórios"],
-    featured: true,
-    premium: false,
-    score: { price: 8.2, trust: 8.3, variety: 8.6, service: 8.1, warranty: 7.4, location: 7.9, parking: 6.5, wholesale: 7.9 },
-    reviewSummary: "Missão games mais eficiente quando você vai direto ao especialista.",
-    worthIt: "Vale muito para quem quer precisão no segmento gamer.",
-    recommendedProducts: ["PlayStation", "Nintendo", "Headsets", "Controles"],
-  },
-  {
-    id: "store-toku-importados",
-    name: "Toku Importados",
-    slug: "toku-importados",
-    shortDescription: "Boa opção para presentes, utilidades e itens de casa.",
-    fullDescription: "Uma parada prática para completar compras de casa e presentes com estética mais organizada. Faz sentido para quem quer variedade sem entrar em lojas gigantescas.",
-    categorySlugs: ["casa", "moda"],
-    missionSlugs: ["casa"],
-    city: "Ciudad del Este",
-    country: "Paraguai",
-    address: "Centro de CDE",
-    googleMapsUrl: "https://maps.google.com/?q=Toku+Importados+Ciudad+del+Este",
-    whatsapp: "+595000000008",
-    openingHours: "Seg a sáb, 7h às 15h",
-    paymentMethods: ["Dinheiro", "Cartão"],
-    parkingInfo: "Estacionamento de rua e bolsões próximos.",
-    coverAccent: "from-amber-950 via-amber-700 to-yellow-300",
-    logoText: "TK",
-    tags: ["utilidades", "presente", "casa"],
-    featured: false,
-    premium: false,
-    score: { price: 8.0, trust: 7.8, variety: 8.2, service: 7.7, warranty: 7.0, location: 7.8, parking: 6.6, wholesale: 7.3 },
-    reviewSummary: "Boa surpresa para casa e presentes fora do circuito mais previsível.",
-    worthIt: "Vale se a sua missão envolver itens de casa e ticket médio.",
-    recommendedProducts: ["Utensílios", "Decoração", "Presentes"],
-  },
-  {
-    id: "store-sax",
-    name: "SAX Department Store",
-    slug: "sax-department-store",
-    shortDescription: "Departamento premium com foco em moda, beleza e experiência.",
-    fullDescription: "SAX entrega uma sensação mais sofisticada de compra, especialmente em moda e beleza. É menos sobre caçar o menor preço e mais sobre seleção, ambiente e marcas desejadas.",
-    categorySlugs: ["moda", "perfumes"],
-    missionSlugs: ["moda", "perfumes"],
-    city: "Ciudad del Este",
-    country: "Paraguai",
-    address: "Shopping Del Este, Ciudad del Este",
-    googleMapsUrl: "https://maps.google.com/?q=SAX+Department+Store+Ciudad+del+Este",
-    instagramUrl: "https://instagram.com/saxdepartmentstore",
-    websiteUrl: "https://sax.com.py",
-    whatsapp: "+595000000009",
-    openingHours: "Seg a sáb, 7h às 16h30",
-    paymentMethods: ["Cartão", "Dinheiro", "Dólar"],
-    parkingInfo: "Boa estrutura de acesso.",
-    coverAccent: "from-zinc-950 via-stone-800 to-amber-400",
-    logoText: "SX",
-    tags: ["premium", "moda", "beleza"],
-    featured: true,
-    premium: true,
-    score: { price: 7.1, trust: 8.9, variety: 8.5, service: 9.1, warranty: 8.3, location: 8.8, parking: 8.2, wholesale: 5.8 },
-    reviewSummary: "Experiência premium com apelo forte para moda e beleza.",
-    worthIt: "Vale quando a experiência e a curadoria pesam mais que o desconto máximo.",
-    recommendedProducts: ["Perfumes de luxo", "Bolsas", "Cosméticos", "Óculos"],
+    difficulty: "moderate",
+    crowdLevel: "high",
+    bestTimeToVisit: "7h-9h (abertura, menos aglomeração)",
   },
   {
     id: "store-monalisa",
@@ -365,6 +280,7 @@ export const stores: Store[] = [
     city: "Ciudad del Este",
     country: "Paraguai",
     address: "Avenida principal do centro",
+    coordinates: { lat: -25.5105, lng: -54.6115 },
     googleMapsUrl: "https://maps.google.com/?q=Monalisa+Ciudad+del+Este",
     instagramUrl: "https://instagram.com/monalisapy",
     websiteUrl: "https://monalisa.com.py",
@@ -372,6 +288,7 @@ export const stores: Store[] = [
     openingHours: "Seg a sáb, 7h às 16h",
     paymentMethods: ["Cartão", "Dinheiro", "Dólar"],
     parkingInfo: "Estrutura conhecida, mas com maior fluxo em datas fortes.",
+    parkingScore: 7.5,
     coverAccent: "from-rose-950 via-fuchsia-700 to-pink-400",
     logoText: "MO",
     tags: ["perfume", "luxo", "beleza"],
@@ -381,163 +298,74 @@ export const stores: Store[] = [
     reviewSummary: "Muito forte em confiança para perfumaria e cosméticos.",
     worthIt: "Vale especialmente para quem quer comprar beleza sem risco desnecessário.",
     recommendedProducts: ["Perfumes importados", "Skincare", "Maquiagem premium"],
+    difficulty: "easy",
+    crowdLevel: "high",
+    bestTimeToVisit: "7h-9h (antes do pico)",
   },
   {
-    id: "store-elegancia",
-    name: "Elegância",
-    slug: "elegancia",
-    shortDescription: "Moda e acessórios com apelo comercial e boa rotatividade.",
-    fullDescription: "Ponto interessante para quem quer explorar moda com potencial de revenda e compra por impulso. Mais relevante quando a missão é montar sacolas de variedade.",
-    categorySlugs: ["moda", "atacado"],
-    missionSlugs: ["moda", "revenda"],
+    id: "store-sax",
+    name: "SAX Department Store",
+    slug: "sax-department-store",
+    shortDescription: "Departamento premium com foco em moda, beleza e experiência.",
+    fullDescription: "SAX entrega uma sensação mais sofisticada de compra, especialmente em moda e beleza. É menos sobre caçar o menor preço e mais sobre seleção, ambiente e marcas desejáveis.",
+    categorySlugs: ["moda", "perfumes"],
+    missionSlugs: ["moda", "perfumes"],
     city: "Ciudad del Este",
     country: "Paraguai",
-    address: "Galeria de moda no centro",
-    googleMapsUrl: "https://maps.google.com/?q=Elegancia+Ciudad+del+Este",
-    whatsapp: "+595000000011",
-    openingHours: "Seg a sáb, 7h às 15h",
-    paymentMethods: ["Dinheiro", "Pix via parceiro", "Cartão"],
-    parkingInfo: "Melhor chegar cedo para evitar caminhada maior.",
-    coverAccent: "from-pink-950 via-rose-700 to-orange-300",
-    logoText: "EL",
-    tags: ["moda", "revenda", "acessórios"],
-    featured: false,
-    premium: false,
-    score: { price: 8.4, trust: 7.5, variety: 8.1, service: 7.4, warranty: 6.7, location: 7.7, parking: 6.2, wholesale: 8.2 },
-    reviewSummary: "Boa para moda com foco comercial e compra rápida.",
-    worthIt: "Vale para quem já conhece seu público e busca margem.",
-    recommendedProducts: ["Bolsas", "Acessórios femininos", "Peças de giro rápido"],
-  },
-  {
-    id: "store-macedonia",
-    name: "Macedônia",
-    slug: "macedonia",
-    shortDescription: "Fornecedor lembrado por importados e operações de volume.",
-    fullDescription: "Mais interessante para quem compra com cabeça de revenda ou precisa explorar mix menos turístico. Não é a loja mais amigável para iniciantes, mas compensa para quem sabe o que quer.",
-    categorySlugs: ["atacado", "casa", "moda"],
-    missionSlugs: ["revenda"],
-    city: "Ciudad del Este",
-    country: "Paraguai",
-    address: "Microcentro de CDE",
-    googleMapsUrl: "https://maps.google.com/?q=Macedonia+Ciudad+del+Este",
-    whatsapp: "+595000000012",
-    openingHours: "Seg a sáb, 7h às 15h",
-    paymentMethods: ["Dinheiro", "Transferência"],
-    parkingInfo: "Acesso mais funcional do que confortável.",
-    coverAccent: "from-lime-950 via-green-700 to-emerald-400",
-    logoText: "MA",
-    tags: ["atacado", "importados", "revenda"],
-    featured: false,
+    address: "Shopping Del Este, Ciudad del Este",
+    coordinates: { lat: -25.5078, lng: -54.6108 },
+    googleMapsUrl: "https://maps.google.com/?q=SAX+Department+Store+Ciudad+del+Este",
+    instagramUrl: "https://instagram.com/saxdepartmentstore",
+    websiteUrl: "https://sax.com.py",
+    whatsapp: "+595000000009",
+    openingHours: "Seg a sáb, 7h às 16h30",
+    paymentMethods: ["Cartão", "Dinheiro", "Dólar"],
+    parkingInfo: "Boa estrutura de acesso.",
+    parkingScore: 8.5,
+    coverAccent: "from-zinc-950 via-stone-800 to-amber-400",
+    logoText: "SX",
+    tags: ["premium", "moda", "beleza"],
+    featured: true,
     premium: true,
-    score: { price: 8.8, trust: 7.4, variety: 8.1, service: 7.1, warranty: 6.8, location: 7.4, parking: 5.9, wholesale: 9.1 },
-    reviewSummary: "Mais valiosa para quem compra volume e já domina a rota.",
-    worthIt: "Vale quando a missão é margem e não passeio.",
-    recommendedProducts: ["Utilidades", "Moda popular", "Mix de revenda"],
+    score: { price: 7.1, trust: 8.9, variety: 8.5, service: 9.1, warranty: 8.3, location: 8.8, parking: 8.2, wholesale: 5.8 },
+    reviewSummary: "Experiência premium com apelo forte para moda e beleza.",
+    worthIt: "Vale quando a experiência e a curadoria pesam mais que o desconto máximo.",
+    recommendedProducts: ["Perfumes de luxo", "Bolsas", "Cosméticos", "Óculos"],
+    difficulty: "easy",
+    crowdLevel: "medium",
+    bestTimeToVisit: "10h-14h (horário intermediário)",
   },
   {
-    id: "store-la-petisqueira",
-    name: "La Petisqueira",
-    slug: "la-petisqueira",
-    shortDescription: "Parada gastronômica útil no meio da missão de compras.",
-    fullDescription: "Nem toda parada precisa ser sobre compra. A La Petisqueira entra como apoio de rota para reorganizar o dia, descansar e seguir comprando com menos desgaste.",
-    categorySlugs: ["gastronomia"],
-    missionSlugs: ["primeira-viagem"],
-    city: "Ciudad del Este",
-    country: "Paraguai",
-    address: "Próximo ao eixo comercial central",
-    googleMapsUrl: "https://maps.google.com/?q=La+Petisqueira+Ciudad+del+Este",
-    instagramUrl: "https://instagram.com/lapetisqueira",
-    whatsapp: "+595000000013",
-    openingHours: "Seg a sáb, 10h às 18h",
-    paymentMethods: ["Cartão", "Dinheiro"],
-    parkingInfo: "Estacionamento próximo com rotatividade moderada.",
-    coverAccent: "from-orange-950 via-red-700 to-amber-300",
-    logoText: "LP",
-    tags: ["almoço", "pausa", "rota"],
-    featured: false,
-    premium: false,
-    score: { price: 7.6, trust: 8.4, variety: 7.1, service: 8.2, warranty: 7.0, location: 8.1, parking: 7.0, wholesale: 4.0 },
-    reviewSummary: "Boa pausa estratégica em um dia de compras intenso.",
-    worthIt: "Vale como ponto de respiro no meio da rota.",
-    recommendedProducts: ["Refeições rápidas", "Café", "Pausa de rota"],
-  },
-  {
-    id: "store-sa-shop",
-    name: "SA Shop",
-    slug: "sa-shop",
-    shortDescription: "Loja prática para eletrônicos de giro e comparativos rápidos.",
-    fullDescription: "Uma boa opção para quem gosta de montar rota com 3 ou 4 paradas de comparação. Não é necessariamente a mais famosa, mas pode render achados relevantes.",
-    categorySlugs: ["tecnologia"],
-    missionSlugs: ["eletronicos", "revenda"],
+    id: "store-hb-games",
+    name: "HB Games",
+    slug: "hb-games",
+    shortDescription: "Especializada em consoles, jogos e acessórios gamer.",
+    fullDescription: "Loja de nicho que faz sentido quando a missão é games. Ajuda a encontrar acessórios específicos e dá mais precisão para quem não quer misturar essa compra com varejo tradicional.",
+    categorySlugs: ["games", "tecnologia"],
+    missionSlugs: ["games", "revenda"],
     city: "Ciudad del Este",
     country: "Paraguai",
     address: "Centro comercial de CDE",
-    googleMapsUrl: "https://maps.google.com/?q=SA+Shop+Ciudad+del+Este",
-    whatsapp: "+595000000014",
-    openingHours: "Seg a sáb, 7h às 15h30",
+    coordinates: { lat: -25.5118, lng: -54.6128 },
+    googleMapsUrl: "https://maps.google.com/?q=HB+Games+Ciudad+del+Este",
+    instagramUrl: "https://instagram.com/hbgamespy",
+    whatsapp: "+595000000007",
+    openingHours: "Seg a sáb, 7h30 às 15h30",
     paymentMethods: ["Dinheiro", "Dólar", "Cartão"],
-    parkingInfo: "Acesso médio, sem grande estrutura dedicada.",
-    coverAccent: "from-slate-950 via-slate-700 to-cyan-300",
-    logoText: "SA",
-    tags: ["comparativo", "tech", "giro rápido"],
-    featured: false,
+    parkingInfo: "Estacionamento rotativo próximo.",
+    parkingScore: 6.8,
+    coverAccent: "from-violet-950 via-violet-700 to-fuchsia-500",
+    logoText: "HB",
+    tags: ["playstation", "nintendo", "acessórios"],
+    featured: true,
     premium: false,
-    score: { price: 8.5, trust: 7.7, variety: 7.8, service: 7.5, warranty: 7.1, location: 7.6, parking: 6.1, wholesale: 7.9 },
-    reviewSummary: "Boa para comparação final antes de fechar tecnologia.",
-    worthIt: "Vale se você estiver montando uma rota orientada por preço.",
-    recommendedProducts: ["Acessórios", "Smartphones", "Informática"],
-  },
-  {
-    id: "store-oasis-plaza",
-    name: "Oasis Plaza",
-    slug: "oasis-plaza",
-    shortDescription: "Complexo útil para circulação mais confortável e compras combinadas.",
-    fullDescription: "Oasis Plaza ajuda quando a prioridade é organizar o dia e mesclar compras com logística mais tranquila. Boa opção para quem valoriza experiência e variedade moderada.",
-    categorySlugs: ["moda", "casa", "tecnologia"],
-    missionSlugs: ["primeira-viagem", "moda"],
-    city: "Ciudad del Este",
-    country: "Paraguai",
-    address: "Região central com acesso facilitado",
-    googleMapsUrl: "https://maps.google.com/?q=Oasis+Plaza+Ciudad+del+Este",
-    whatsapp: "+595000000015",
-    openingHours: "Seg a sáb, 8h às 16h",
-    paymentMethods: ["Cartão", "Dinheiro"],
-    parkingInfo: "Ponto positivo do complexo.",
-    coverAccent: "from-teal-950 via-emerald-700 to-cyan-300",
-    logoText: "OP",
-    tags: ["conforto", "shopping", "primeira viagem"],
-    featured: false,
-    premium: false,
-    score: { price: 7.7, trust: 8.0, variety: 7.9, service: 8.1, warranty: 7.2, location: 8.2, parking: 8.4, wholesale: 6.0 },
-    reviewSummary: "Boa opção para quem quer um dia menos caótico.",
-    worthIt: "Vale quando a logística pesa tanto quanto o preço.",
-    recommendedProducts: ["Moda casual", "Acessórios", "Itens variados"],
-  },
-  {
-    id: "store-shopping-americana",
-    name: "Shopping Americana",
-    slug: "shopping-americana",
-    shortDescription: "Mix popular com boa leitura para compras de impulso e revenda.",
-    fullDescription: "Interessante para explorar produtos de giro, itens populares e compras mais agressivas em preço. Menos premium, mais comercial.",
-    categorySlugs: ["atacado", "moda", "casa"],
-    missionSlugs: ["revenda", "casa"],
-    city: "Ciudad del Este",
-    country: "Paraguai",
-    address: "Microcentro de CDE",
-    googleMapsUrl: "https://maps.google.com/?q=Shopping+Americana+Ciudad+del+Este",
-    whatsapp: "+595000000016",
-    openingHours: "Seg a sáb, 7h às 15h",
-    paymentMethods: ["Dinheiro", "Transferência", "Cartão"],
-    parkingInfo: "Estrutura básica com bastante movimento.",
-    coverAccent: "from-yellow-950 via-orange-700 to-lime-300",
-    logoText: "AM",
-    tags: ["revenda", "popular", "mix"],
-    featured: false,
-    premium: false,
-    score: { price: 8.7, trust: 7.2, variety: 8.0, service: 7.0, warranty: 6.5, location: 7.5, parking: 5.8, wholesale: 8.9 },
-    reviewSummary: "Mais comercial do que aspiracional, com potencial de margem.",
-    worthIt: "Vale para quem busca giro e compra enxuta por oportunidade.",
-    recommendedProducts: ["Acessórios populares", "Utilidades", "Moda de volume"],
+    score: { price: 8.2, trust: 8.3, variety: 8.6, service: 8.1, warranty: 7.4, location: 7.9, parking: 6.5, wholesale: 7.9 },
+    reviewSummary: "Missão games mais eficiente quando você vai direto ao especialista.",
+    worthIt: "Vale muito para quem quer precisão no segmento gamer.",
+    recommendedProducts: ["PlayStation", "Nintendo", "Headsets", "Controles"],
+    difficulty: "moderate",
+    crowdLevel: "low",
+    bestTimeToVisit: "13h-15h (menos movimento)",
   },
   {
     id: "store-mega-vestcasa",
@@ -550,11 +378,13 @@ export const stores: Store[] = [
     city: "Ciudad del Este",
     country: "Paraguai",
     address: "Eixo comercial de CDE",
+    coordinates: { lat: -25.5130, lng: -54.6150 },
     googleMapsUrl: "https://maps.google.com/?q=Mega+Vestcasa+Ciudad+del+Este",
     whatsapp: "+595000000017",
     openingHours: "Seg a sáb, 7h às 15h30",
     paymentMethods: ["Dinheiro", "Cartão"],
     parkingInfo: "Bolsões próximos; vale evitar pico.",
+    parkingScore: 7.2,
     coverAccent: "from-stone-950 via-amber-700 to-orange-300",
     logoText: "MV",
     tags: ["casa", "enxoval", "utilidades"],
@@ -564,33 +394,9 @@ export const stores: Store[] = [
     reviewSummary: "Excelente foco para missão casa e revenda leve.",
     worthIt: "Vale muito quando o objetivo é comprar casa sem dispersão.",
     recommendedProducts: ["Enxoval", "Utensílios", "Organização"],
-  },
-  {
-    id: "store-infinity-sport",
-    name: "Infinity Sport",
-    slug: "infinity-sport",
-    shortDescription: "Moda esportiva, tênis e peças com apelo comercial.",
-    fullDescription: "Ponto útil para quem busca artigos esportivos ou quer testar uma missão mais voltada a moda casual e sneakers. Relevante tanto para consumo quanto para revenda pontual.",
-    categorySlugs: ["moda"],
-    missionSlugs: ["moda", "revenda"],
-    city: "Ciudad del Este",
-    country: "Paraguai",
-    address: "Centro comercial de CDE",
-    googleMapsUrl: "https://maps.google.com/?q=Infinity+Sport+Ciudad+del+Este",
-    instagramUrl: "https://instagram.com/infinitysportpy",
-    whatsapp: "+595000000018",
-    openingHours: "Seg a sáb, 7h às 15h30",
-    paymentMethods: ["Cartão", "Dinheiro", "Dólar"],
-    parkingInfo: "Rotatividade média e acesso razoável.",
-    coverAccent: "from-blue-950 via-indigo-700 to-sky-400",
-    logoText: "IS",
-    tags: ["sport", "tenis", "moda"],
-    featured: false,
-    premium: false,
-    score: { price: 8.2, trust: 7.8, variety: 8.0, service: 7.7, warranty: 7.1, location: 7.9, parking: 6.3, wholesale: 7.8 },
-    reviewSummary: "Boa parada para moda esportiva e tênis com apelo comercial.",
-    worthIt: "Vale se a missão inclui peças esportivas e compra orientada por giro.",
-    recommendedProducts: ["Tênis", "Camisas esportivas", "Acessórios fitness"],
+    difficulty: "easy",
+    crowdLevel: "low",
+    bestTimeToVisit: "8h-11h",
   },
 ];
 
@@ -638,74 +444,19 @@ export const guides: Guide[] = [
     accent: "from-slate-700 to-slate-400",
   },
   {
-    id: "guide-dinheiro",
-    title: "Como trocar dinheiro",
-    slug: "como-trocar-dinheiro",
-    category: "Câmbio",
-    summary: "Como decidir entre real, dólar, cartão e câmbio no dia.",
+    id: "guide-rota-otimizada",
+    title: "Como otimizar sua rota de compras",
+    slug: "como-otimizar-rota-compras",
+    category: "Estratégia",
+    summary: "Planejamento inteligente para maximizar tempo e reduzir cansaço.",
     content: [
-      "Compare a taxa efetiva e não apenas a cotação anunciada.",
-      "Algumas lojas têm vantagem em dólar, outras em pagamento local.",
-      "Evite chegar sem plano de pagamento para não perder margem logo no início.",
+      "Use o mapa inteligente para gerar rotas baseadas em suas missões escolhidas.",
+      "Considere o horário de menor aglomeração para cada loja (informação no detalhe da loja).",
+      "Agrupe lojas por proximidade geográfica para reduzir distâncias e tempo de deslocamento.",
+      "Inclua uma pausa no meio do dia para reorganizar compras e descansar.",
     ],
-    premium: true,
+    premium: false,
     accent: "from-emerald-600 to-lime-400",
-  },
-  {
-    id: "guide-golpes",
-    title: "Como evitar golpes",
-    slug: "como-evitar-golpes",
-    category: "Segurança",
-    summary: "Sinais simples que protegem tempo, dinheiro e energia.",
-    content: [
-      "Desconfie de urgência artificial e ofertas que não permitem comparação.",
-      "Confirme localização, reputação e canais oficiais antes de comprar.",
-      "Mantenha a rota clara para não depender de orientação improvisada.",
-    ],
-    premium: false,
-    accent: "from-amber-500 to-red-500",
-  },
-  {
-    id: "guide-checklist",
-    title: "Checklist primeira viagem",
-    slug: "checklist-primeira-viagem",
-    category: "Primeira viagem",
-    summary: "O essencial para sair do zero e atravessar com mais segurança.",
-    content: [
-      "Defina objetivo principal, orçamento e lista de prioridades.",
-      "Escolha 3 a 5 paradas estratégicas e evite excesso de improviso.",
-      "Planeje alimentação, câmbio e retorno antes de começar a comprar.",
-    ],
-    premium: true,
-    accent: "from-indigo-600 to-sky-400",
-  },
-  {
-    id: "guide-receita",
-    title: "Receita Federal e cota",
-    slug: "receita-federal-e-cota",
-    category: "Regras",
-    summary: "Uma leitura rápida para evitar compras sem contexto de retorno.",
-    content: [
-      "Entenda sua cota antes de definir a lista de produtos.",
-      "A soma da compra importa tanto quanto o item individual.",
-      "Compra sem estratégia pode gerar economia falsa.",
-    ],
-    premium: false,
-    accent: "from-zinc-700 to-zinc-400",
-  },
-  {
-    id: "guide-estacionar",
-    title: "Onde estacionar",
-    slug: "onde-estacionar",
-    category: "Logística",
-    summary: "Como ganhar tempo escolhendo melhor sua base de apoio.",
-    content: [
-      "Avalie estacionamento pela proximidade da primeira missão, não pelo preço isolado.",
-      "Se o plano é comprar volume, conforto na saída vale muito.",
-      "Estacionar bem pode salvar a segunda metade do dia.",
-    ],
-    premium: true,
-    accent: "from-teal-600 to-cyan-400",
   },
 ];
 
@@ -726,120 +477,12 @@ export const suppliers: Supplier[] = [
     premium: true,
     accent: "from-slate-900 to-sky-500",
   },
-  {
-    id: "sup-perfume-depot",
-    name: "Perfume Depot",
-    slug: "perfume-depot",
-    segment: "Perfumes",
-    description: "Mix de fragrâncias com foco em lotes comerciais e giro rápido.",
-    instagramUrl: "https://instagram.com/perfumedepotpy",
-    whatsapp: "+595000100002",
-    minimumOrder: "Caixa fechada por marca",
-    sellsWholesale: true,
-    shipsToBrazil: true,
-    paymentMethods: ["Dólar", "Dinheiro"],
-    frontierNote: "Boa opção para quem já valida saída no Instagram ou WhatsApp.",
-    premium: true,
-    accent: "from-rose-900 to-fuchsia-500",
-  },
-  {
-    id: "sup-rio-fashion",
-    name: "Rio Fashion Source",
-    slug: "rio-fashion-source",
-    segment: "Roupas",
-    description: "Fornecimento de moda casual e peças femininas de giro.",
-    whatsapp: "+595000100003",
-    minimumOrder: "30 peças mistas",
-    sellsWholesale: true,
-    shipsToBrazil: false,
-    paymentMethods: ["Transferência", "Dinheiro"],
-    frontierNote: "Vale para quem já conhece grade e trabalha com prova social.",
-    premium: false,
-    accent: "from-orange-900 to-pink-500",
-  },
-  {
-    id: "sup-home-origin",
-    name: "Home Origin",
-    slug: "home-origin",
-    segment: "Casa",
-    description: "Utilidades, organização e kits de casa para revenda.",
-    whatsapp: "+595000100004",
-    minimumOrder: "Pedido mínimo de USD 300",
-    sellsWholesale: true,
-    shipsToBrazil: true,
-    paymentMethods: ["Dólar", "Transferência"],
-    frontierNote: "Boa entrada para quem quer revender enxoval e utilidades.",
-    premium: false,
-    accent: "from-amber-900 to-yellow-400",
-  },
-  {
-    id: "sup-toy-route",
-    name: "Toy Route",
-    slug: "toy-route",
-    segment: "Brinquedos",
-    description: "Mix comercial de brinquedos, presentes e itens sazonais.",
-    instagramUrl: "https://instagram.com/toyroutepy",
-    whatsapp: "+595000100005",
-    minimumOrder: "USD 250 por pedido",
-    sellsWholesale: true,
-    shipsToBrazil: false,
-    paymentMethods: ["Dinheiro", "Dólar"],
-    frontierNote: "Faz mais sentido em épocas de datas comemorativas.",
-    premium: false,
-    accent: "from-indigo-900 to-violet-500",
-  },
-  {
-    id: "sup-moto-core",
-    name: "Moto Core",
-    slug: "moto-core",
-    segment: "Moto",
-    description: "Capacetes, peças e acessórios com foco técnico.",
-    whatsapp: "+595000100006",
-    minimumOrder: "A partir de 10 peças",
-    sellsWholesale: true,
-    shipsToBrazil: false,
-    paymentMethods: ["Transferência", "Dólar"],
-    frontierNote: "Interessante para nichos de ticket maior e público específico.",
-    premium: true,
-    accent: "from-lime-900 to-green-500",
-  },
-  {
-    id: "sup-game-wholesale",
-    name: "Game Wholesale",
-    slug: "game-wholesale",
-    segment: "Games",
-    description: "Consoles, periféricos e acessórios com leitura de revenda.",
-    instagramUrl: "https://instagram.com/gamewholesalepy",
-    whatsapp: "+595000100007",
-    minimumOrder: "A partir de USD 500",
-    sellsWholesale: true,
-    shipsToBrazil: false,
-    paymentMethods: ["Dólar", "Crédito empresarial"],
-    frontierNote: "Bom para quem já vende tech e quer abrir frente gamer.",
-    premium: true,
-    accent: "from-violet-900 to-indigo-500",
-  },
-  {
-    id: "sup-atacado-plus",
-    name: "Atacado Plus",
-    slug: "atacado-plus",
-    segment: "Atacado",
-    description: "Mix geral de oportunidade para lojistas e sacoleiros estruturados.",
-    whatsapp: "+595000100008",
-    minimumOrder: "Conforme categoria",
-    sellsWholesale: true,
-    shipsToBrazil: true,
-    paymentMethods: ["Transferência", "Dólar", "Dinheiro"],
-    frontierNote: "Mais útil para quem gosta de montar carrinho misto por margem.",
-    premium: true,
-    accent: "from-emerald-900 to-teal-500",
-  },
 ];
 
 export const weeklyOpportunities = [
-  "Rota curta para eletrônicos: Cell Shop, Shopping China e SA Shop.",
-  "Perfumaria com menos atrito: Monalisa primeiro, comparação final na SAX.",
-  "Missão casa direta: Mega Vestcasa + Toku Importados.",
+  "Rota curta para eletrônicos: Cell Shop, Shopping China e Mega Eletrônicos (7h-10h, menos aglomeração).",
+  "Perfumaria com menos atrito: Monalisa primeiro (7h-9h), comparação final na SAX (10h-14h).",
+  "Missão casa direta: Mega Vestcasa (8h-11h) + compra rápida, retorno antes do pico.",
 ];
 
 export const premiumCollections = [
@@ -869,6 +512,190 @@ export function getRelatedStores(store: Store) {
 
 export function getStoresByMission(missionSlug: string) {
   return stores.filter((store) => store.missionSlugs.includes(missionSlug));
+}
+
+/**
+ * Calcula a distância entre duas coordenadas usando a fórmula de Haversine
+ */
+export function calculateDistance(from: Coordinates, to: Coordinates): number {
+  const R = 6371; // Raio da Terra em km
+  const dLat = ((to.lat - from.lat) * Math.PI) / 180;
+  const dLng = ((to.lng - from.lng) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((from.lat * Math.PI) / 180) *
+      Math.cos((to.lat * Math.PI) / 180) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+/**
+ * Estima tempo de deslocamento entre lojas (simplificado)
+ */
+export function estimateTravelTime(distance: number): number {
+  // Considerando velocidade média de 15 km/h em Ciudad del Este
+  return Math.ceil((distance / 15) * 60);
+}
+
+/**
+ * Gera uma rota inteligente baseada em missão
+ */
+export function generateSmartRoute(missionSlug: string): SmartRoute | null {
+  const storesInMission = getStoresByMission(missionSlug);
+  if (storesInMission.length === 0) return null;
+
+  // Ordena lojas por proximidade usando algoritmo simplificado
+  const sortedStores = [...storesInMission].sort((a, b) => {
+    const scoreA = averageScore(a.score);
+    const scoreB = averageScore(b.score);
+    return scoreB - scoreA; // Maior score primeiro
+  });
+
+  // Calcula segmentos de rota
+  let totalDistance = 0;
+  let totalTime = 0;
+  const segments: RouteSegment[] = [];
+
+  for (let i = 0; i < sortedStores.length - 1; i++) {
+    const distance = calculateDistance(
+      sortedStores[i].coordinates,
+      sortedStores[i + 1].coordinates,
+    );
+    const duration = estimateTravelTime(distance);
+    totalDistance += distance;
+    totalTime += duration;
+
+    segments.push({
+      from: sortedStores[i].name,
+      to: sortedStores[i + 1].name,
+      distance: Math.round(distance * 10) / 10,
+      duration,
+      difficulty: distance > 2 ? "hard" : distance > 1 ? "moderate" : "easy",
+    });
+  }
+
+  // Adiciona tempo de compra estimado (30 min por loja)
+  totalTime += sortedStores.length * 30;
+
+  const difficulty =
+    totalDistance > 5 ? "hard" : totalDistance > 2 ? "moderate" : "easy";
+
+  return {
+    id: `route-${missionSlug}-${Date.now()}`,
+    missionSlug,
+    stores: sortedStores,
+    totalDistance: Math.round(totalDistance * 10) / 10,
+    estimatedTime: totalTime,
+    segments,
+    difficulty,
+    description: `Rota otimizada com ${sortedStores.length} paradas para a missão ${missionSlug}`,
+  };
+}
+
+/**
+ * Filtra lojas com critérios avançados
+ */
+export function filterStoresByAdvancedCriteria(options: {
+  query?: string;
+  categories?: string[];
+  missions?: string[];
+  maxPrice?: number;
+  minTrust?: number;
+  parkingRequired?: boolean;
+  crowdPreference?: 'low' | 'medium' | 'high';
+  difficulty?: 'easy' | 'moderate' | 'hard';
+}): Store[] {
+  return stores.filter((store) => {
+    // Filtro por busca textual
+    if (options.query) {
+      const normalized = options.query.toLowerCase();
+      const matches =
+        store.name.toLowerCase().includes(normalized) ||
+        store.tags.some((tag) => tag.toLowerCase().includes(normalized)) ||
+        store.shortDescription.toLowerCase().includes(normalized);
+      if (!matches) return false;
+    }
+
+    // Filtro por categorias
+    if (options.categories && options.categories.length > 0) {
+      const hasCategory = store.categorySlugs.some((slug) =>
+        options.categories!.includes(slug),
+      );
+      if (!hasCategory) return false;
+    }
+
+    // Filtro por missões
+    if (options.missions && options.missions.length > 0) {
+      const hasMission = store.missionSlugs.some((slug) =>
+        options.missions!.includes(slug),
+      );
+      if (!hasMission) return false;
+    }
+
+    // Filtro por preço (usando score de preço)
+    if (options.maxPrice) {
+      if (store.score.price < options.maxPrice) return false;
+    }
+
+    // Filtro por confiança
+    if (options.minTrust && store.score.trust < options.minTrust) {
+      return false;
+    }
+
+    // Filtro por estacionamento
+    if (options.parkingRequired && store.parkingScore < 7) {
+      return false;
+    }
+
+    // Filtro por preferência de aglomeração
+    if (options.crowdPreference && store.crowdLevel !== options.crowdPreference) {
+      return false;
+    }
+
+    // Filtro por dificuldade
+    if (options.difficulty && store.difficulty !== options.difficulty) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+/**
+ * Recomenda lojas baseado em preferências do usuário
+ */
+export function recommendStores(userPreferences: {
+  prioritizeTrust?: boolean;
+  prioritizePrice?: boolean;
+  priorityParking?: boolean;
+  maxTime?: number; // em minutos
+}): Store[] {
+  return [...stores]
+    .sort((a, b) => {
+      let scoreA = 0;
+      let scoreB = 0;
+
+      if (userPreferences.prioritizeTrust) {
+        scoreA += a.score.trust * 2;
+        scoreB += b.score.trust * 2;
+      }
+      if (userPreferences.prioritizePrice) {
+        scoreA += a.score.price;
+        scoreB += b.score.price;
+      }
+      if (userPreferences.priorityParking) {
+        scoreA += a.parkingScore;
+        scoreB += b.parkingScore;
+      }
+
+      scoreA += averageScore(a.score);
+      scoreB += averageScore(b.score);
+
+      return scoreB - scoreA;
+    })
+    .slice(0, 10);
 }
 
 export function searchAll(query: string) {
