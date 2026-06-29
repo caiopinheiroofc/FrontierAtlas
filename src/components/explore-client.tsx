@@ -34,6 +34,9 @@ export function ExploreClient({
         <div onChange={(event) => setQuery((event.target as HTMLInputElement).value)}>
           <SearchInput placeholder="Buscar loja por nome, categoria ou tag" />
         </div>
+        <p className="text-sm leading-6 text-[#5e685b]">
+          Esta lista já começa pelas lojas mais importantes para turista, primeira viagem e compra rápida.
+        </p>
         <div className="flex flex-wrap gap-2">
           <button
             type="button"

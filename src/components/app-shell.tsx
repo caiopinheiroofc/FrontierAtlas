@@ -28,22 +28,38 @@ export function AppShell({
               />
             </div>
             <div>
-              <p className="text-sm font-black tracking-[0.18em] uppercase">Frontier Atlas</p>
-              <p className="text-xs text-white/60">Sua rota inteligente de compras</p>
+              <p className="text-sm font-black uppercase tracking-[0.18em]">
+                Frontier Atlas
+              </p>
+              <p className="text-xs text-white/60">
+                Sua rota inteligente de compras
+              </p>
             </div>
           </Link>
 
           <div className="hidden items-center gap-2 xl:flex">
-            <Link className="rounded-full px-4 py-2 text-sm text-white/72 transition hover:bg-white/8 hover:text-white" href="/mapa">
+            <Link
+              className="rounded-full px-4 py-2 text-sm text-white/72 transition hover:bg-white/8 hover:text-white"
+              href="/mapa"
+            >
               Mapa
             </Link>
-            <Link className="rounded-full px-4 py-2 text-sm text-white/72 transition hover:bg-white/8 hover:text-white" href="/explorar">
+            <Link
+              className="rounded-full px-4 py-2 text-sm text-white/72 transition hover:bg-white/8 hover:text-white"
+              href="/explorar"
+            >
               Explorar
             </Link>
-            <Link className="rounded-full px-4 py-2 text-sm text-white/72 transition hover:bg-white/8 hover:text-white" href="/guias">
+            <Link
+              className="rounded-full px-4 py-2 text-sm text-white/72 transition hover:bg-white/8 hover:text-white"
+              href="/guias"
+            >
               Guias
             </Link>
-            <Link className="rounded-full bg-[#d9ff1f] px-4 py-2 text-sm font-semibold text-[#0a0a0a] transition hover:bg-[#c7ef17]" href="/buscar">
+            <Link
+              className="rounded-full bg-[#d9ff1f] px-4 py-2 text-sm font-semibold text-[#0a0a0a] transition hover:bg-[#c7ef17]"
+              href="/buscar"
+            >
               Buscar
             </Link>
           </div>
@@ -56,10 +72,14 @@ export function AppShell({
             <div className="max-w-2xl">
               <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white/70">
                 <span className="h-2 w-2 rounded-full bg-[#27d76c]" />
-                Sua rota inteligente em Ciudad del Este
+                Guia prático para comprar melhor em Ciudad del Este
               </p>
-              <h1 className="text-3xl font-black tracking-[-0.04em] sm:text-5xl">{title}</h1>
-              <p className="mt-3 max-w-xl text-sm leading-6 text-white/68 sm:text-base">{subtitle}</p>
+              <h1 className="text-3xl font-black tracking-[-0.04em] sm:text-5xl">
+                {title}
+              </h1>
+              <p className="mt-3 max-w-xl text-sm leading-6 text-white/68 sm:text-base">
+                {subtitle}
+              </p>
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row">
