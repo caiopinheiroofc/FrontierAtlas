@@ -13,13 +13,13 @@ export default async function ExplorarPage({
 
   return (
     <AppShell
-      title="Descubra lojas com menos ruído."
-      subtitle="Filtre por categoria, missão ou busca simples para montar sua rota com mais intenção."
+      title="Veja primeiro as lojas que mais importam."
+      subtitle="Filtre o essencial para montar uma compra de 1 dia ou uma rota mais completa de 3 dias."
     >
       <SectionHeading
         eyebrow="Explorar"
-        title="Lista inicial de lojas"
-        description="Cada card já entrega categoria principal, Frontier Score, descrição curta e atalho para detalhes e mapa."
+        title="Lojas principais da rota"
+        description="Aqui entram primeiro as paradas mais úteis para uma viagem objetiva e com menos desvio."
       />
       <ExploreClient initialMission={params.mission} stores={stores} categories={categories} />
     </AppShell>

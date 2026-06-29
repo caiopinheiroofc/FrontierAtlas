@@ -10,13 +10,13 @@ export default async function MapaPage() {
 
   return (
     <AppShell
-      title="Mapa inteligente para comprar com menos erro."
-      subtitle="Em vez de jogar lojas soltas na tela, o Frontier Atlas organiza Ciudad del Este por eixos reais de circulação, comparação e decisão."
+      title="Mapa simples com o essencial para turistas na CDE."
+      subtitle="Escolha uma rota curta de 1 dia ou uma rota mais completa de 3 dias com as lojas mais importantes da cidade."
     >
       <SectionHeading
-        eyebrow="Mapa Inteligente"
-        title="A cidade organizada por lógica de compra"
-        description="Cada eixo mostra onde vale começar, comparar ou aprofundar a missão. A ideia não é só abrir o Maps, mas te ajudar a pensar a ordem da rota."
+        eyebrow="Mapa Essencial"
+        title="As principais paradas para comprar melhor"
+        description="Aqui o foco nao e mostrar tudo. E mostrar o que mais ajuda o turista a comprar com menos confusao e menos desvio."
       />
       <SmartMapClient zones={smartMap.zones} />
     </AppShell>

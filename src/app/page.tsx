@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, Lock, MapPinned, Radar, Route, Sparkles, Store } from "lucide-react";
+import { ArrowRight, MapPinned, Radar, Route } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { GuideCard } from "@/components/guide-card";
 import { MissionCard } from "@/components/mission-card";
 import { SearchInput } from "@/components/search-input";
 import { SectionHeading } from "@/components/section-heading";
 import { StoreCard } from "@/components/store-card";
-import { missions, premiumCollections, weeklyOpportunities } from "@/lib/data";
+import { missions } from "@/lib/data";
 import { getCategories, getGuides, getStores } from "@/lib/frontier-data";
 
 export default async function Home() {
@@ -17,11 +17,14 @@ export default async function Home() {
   ]);
   const featuredStores = stores.filter((store) => store.featured).slice(0, 6);
   const quickGuides = guides.slice(0, 4);
+  const essentialMissions = missions.filter((mission) =>
+    ["eletronicos", "perfumes", "revenda", "primeira-viagem"].includes(mission.slug),
+  );
 
   return (
     <AppShell
-      title="Planeje suas compras no Paraguai com mais segurança."
-      subtitle="Frontier Atlas é uma plataforma digital para comprar melhor, economizar tempo e evitar erros em Ciudad del Este."
+      title="Sua rota inteligente de compras em Ciudad del Este."
+      subtitle="Escolha pelo tempo que voce tem, pelo que quer comprar ou pelo seu perfil. O Frontier Atlas resume a cidade no que realmente importa."
     >
       <form action="/buscar" className="rounded-[30px] border border-black/6 bg-white p-4 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.42)]">
         <SearchInput />
@@ -29,21 +32,18 @@ export default async function Home() {
 
       <section className="grid gap-4 lg:grid-cols-[1.4fr_0.9fr]">
         <div className="rounded-[34px] bg-[#0a0a0a] p-6 text-white shadow-[0_35px_110px_-55px_rgba(10,10,10,0.9)]">
-          <p className="mb-3 inline-flex rounded-full border border-white/12 bg-white/6 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-white/72">
-            Hero de validação
-          </p>
           <h2 className="max-w-xl text-3xl font-black tracking-[-0.05em] sm:text-5xl">
-            Se você for hoje ao Paraguai, o Frontier Atlas te ajuda a comprar melhor.
+            O jeito mais simples de decidir onde comprar na CDE.
           </h2>
           <p className="mt-4 max-w-xl text-sm leading-6 text-white/68 sm:text-base">
-            Missões prontas, lojas filtradas, rotas mais seguras e um atalho real para decidir sem perder tempo na fronteira.
+            Em vez de mostrar tudo, o Frontier Atlas monta rotas mais claras com base no seu tempo, nos produtos procurados e no tipo de compra que voce quer fazer.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <Link href="/explorar" className="rounded-full bg-[#d9ff1f] px-5 py-3 text-center text-sm font-semibold text-[#0a0a0a] transition hover:bg-[#c8ee16]">
-              Explorar lojas
+            <Link href="/mapa" className="rounded-full bg-[#d9ff1f] px-5 py-3 text-center text-sm font-semibold text-[#0a0a0a] transition hover:bg-[#c8ee16]">
+              Montar minha rota
             </Link>
-            <Link href="/mapa" className="rounded-full border border-white/12 bg-white/6 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10">
-              Ver mapa inteligente
+            <Link href="/explorar" className="rounded-full border border-white/12 bg-white/6 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10">
+              Ver lojas principais
             </Link>
             <Link href="/guias" className="rounded-full border border-white/12 bg-white/6 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10">
               Ver guias rápidos
@@ -58,23 +58,23 @@ export default async function Home() {
               <div className="rounded-2xl bg-[#f6f7f2] p-4">
                 <div className="mb-2 flex items-center gap-2 text-[#0a0a0a]">
                   <Radar className="h-4 w-4" />
-                  <span className="font-semibold">Rotas mais curtas</span>
+                  <span className="font-semibold">Por tempo</span>
                 </div>
-                <p className="text-sm leading-6 text-[#667064]">Menos improviso, mais decisão rápida nas primeiras horas da viagem.</p>
+                <p className="text-sm leading-6 text-[#667064]">Rotas de 1 dia ou 3 dias para quem quer comprar com clareza.</p>
               </div>
               <div className="rounded-2xl bg-[#f6f7f2] p-4">
                 <div className="mb-2 flex items-center gap-2 text-[#0a0a0a]">
                   <MapPinned className="h-4 w-4" />
-                  <span className="font-semibold">Google Maps pronto</span>
+                  <span className="font-semibold">Por produto</span>
                 </div>
-                <p className="text-sm leading-6 text-[#667064]">Cada loja já nasce com rota prática para abrir no mapa.</p>
+                <p className="text-sm leading-6 text-[#667064]">Eletronicos, perfumes, games e outras compras com foco no que voce quer levar.</p>
               </div>
               <div className="rounded-2xl bg-[#f6f7f2] p-4">
                 <div className="mb-2 flex items-center gap-2 text-[#0a0a0a]">
-                  <Lock className="h-4 w-4" />
-                  <span className="font-semibold">Source Premium</span>
+                  <Route className="h-4 w-4" />
+                  <span className="font-semibold">Por perfil</span>
                 </div>
-                <p className="text-sm leading-6 text-[#667064]">Fornecedores e missões prontas para revenda e compras de nicho.</p>
+                <p className="text-sm leading-6 text-[#667064]">Primeira viagem, compra rápida, revenda e outros contextos de compra.</p>
               </div>
             </div>
           </div>
@@ -83,12 +83,83 @@ export default async function Home() {
 
       <section className="space-y-5">
         <SectionHeading
+          eyebrow="Entradas"
+          title="Escolha como quer montar sua rota"
+          description="O produto comeca por tres perguntas simples: quanto tempo voce tem, o que quer comprar e que tipo de viagem voce vai fazer."
+        />
+        <div className="grid gap-4 lg:grid-cols-3">
+          <div className="rounded-[30px] border border-black/6 bg-white p-6 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.4)]">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#6b7280]">Por tempo</p>
+            <h3 className="mt-3 text-2xl font-black tracking-[-0.04em] text-[#0a0a0a]">1 dia ou 3 dias</h3>
+            <p className="mt-3 text-sm leading-6 text-[#5e685b]">
+              A forma mais direta para turista: rota curta para resolver o essencial ou rota longa para comparar com calma.
+            </p>
+            <Link href="/mapa" className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#0a0a0a] px-5 py-3 text-sm font-semibold text-white">
+              Ver rotas por tempo
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="rounded-[30px] border border-black/6 bg-white p-6 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.4)]">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#6b7280]">Por produto</p>
+            <h3 className="mt-3 text-2xl font-black tracking-[-0.04em] text-[#0a0a0a]">O que voce quer comprar</h3>
+            <p className="mt-3 text-sm leading-6 text-[#5e685b]">
+              Entre por eletronicos, perfumes, casa ou games e veja primeiro as lojas que mais ajudam nessa compra.
+            </p>
+            <Link href="/explorar?mission=eletronicos" className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#eff4e8] px-5 py-3 text-sm font-semibold text-[#0a0a0a]">
+              Ver rotas por produto
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="rounded-[30px] border border-black/6 bg-white p-6 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.4)]">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#6b7280]">Por perfil</p>
+            <h3 className="mt-3 text-2xl font-black tracking-[-0.04em] text-[#0a0a0a]">Seu tipo de viagem</h3>
+            <p className="mt-3 text-sm leading-6 text-[#5e685b]">
+              Primeira viagem, compra rapida, revenda ou compra em familia. O foco muda e a rota tambem.
+            </p>
+            <Link href="/explorar?mission=primeira-viagem" className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#eff4e8] px-5 py-3 text-sm font-semibold text-[#0a0a0a]">
+              Ver rotas por perfil
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-4 lg:grid-cols-2">
+        <div className="rounded-[30px] border border-black/6 bg-white p-6 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.4)]">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#6b7280]">Rota de 1 dia</p>
+          <h3 className="mt-3 text-2xl font-black tracking-[-0.04em] text-[#0a0a0a]">Resolver o principal sem perder tempo</h3>
+          <p className="mt-3 text-sm leading-6 text-[#5e685b]">
+            Ideal para quem vai e volta no mesmo dia, com foco em eletrônicos, perfumes e lojas de confiança.
+          </p>
+          <Link href="/mapa" className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#0a0a0a] px-5 py-3 text-sm font-semibold text-white">
+            Abrir rota curta
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="rounded-[30px] border border-black/6 bg-white p-6 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.4)]">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#6b7280]">Rota de 3 dias</p>
+          <h3 className="mt-3 text-2xl font-black tracking-[-0.04em] text-[#0a0a0a]">Comprar com mais comparação e calma</h3>
+          <p className="mt-3 text-sm leading-6 text-[#5e685b]">
+            Melhor para quem quer dividir a compra por regiões, comparar melhor e explorar mais categorias sem pressa.
+          </p>
+          <Link href="/explorar" className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#eff4e8] px-5 py-3 text-sm font-semibold text-[#0a0a0a]">
+            Ver lojas da rota longa
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
+
+      <section className="space-y-5">
+        <SectionHeading
           eyebrow="Missões"
-          title="Comece pela sua missão, não pela confusão."
-          description="Cada missão organiza o tipo de compra que você quer fazer e reduz a chance de dispersão logo no início do dia."
+          title="Missões que viram rotas simples"
+          description="Cada missao funciona como um jeito facil de transformar uma necessidade em uma rota mais clara."
         />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {missions.map((mission) => (
+          {essentialMissions.map((mission) => (
             <MissionCard key={mission.slug} mission={mission} />
           ))}
         </div>
@@ -97,8 +168,8 @@ export default async function Home() {
       <section className="space-y-5">
         <SectionHeading
           eyebrow="Destaques"
-          title="Lojas em destaque"
-          description="Uma seleção inicial de paradas conhecidas, úteis e fáceis de testar nesta primeira versão do produto."
+          title="Lojas que mais ajudam a decisao"
+          description="Uma selecao enxuta das paradas mais importantes para turista, primeira viagem e compras de maior interesse."
         />
         <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
           {featuredStores.map((store) => (
@@ -107,63 +178,24 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="space-y-5">
-          <SectionHeading
-            eyebrow="Guias rápidos"
-            title="O valor precisa aparecer em menos de 30 segundos."
-            description="Conteúdos curtos para orientar a primeira viagem, evitar erros clássicos e deixar a compra mais objetiva."
-          />
-          <div className="grid gap-4">
-            {quickGuides.map((guide) => (
-              <GuideCard key={guide.id} guide={guide} />
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-5">
-          <div className="rounded-[30px] bg-[#0d1810] p-6 text-white shadow-[0_35px_110px_-55px_rgba(39,215,108,0.55)]">
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-white/74">
-              <Sparkles className="h-3.5 w-3.5" />
-              Oportunidades da semana
-            </p>
-            <div className="mt-5 space-y-3">
-              {weeklyOpportunities.map((item) => (
-                <div key={item} className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-white/78">
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-[30px] border border-black/6 bg-white p-6 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.4)]">
-            <div className="flex items-center gap-2 text-[#0a0a0a]">
-              <Store className="h-5 w-5" />
-              <h3 className="text-2xl font-black tracking-[-0.03em]">Source Premium</h3>
-            </div>
-            <p className="mt-3 text-sm leading-6 text-[#647063]">
-              Área para fornecedores, contatos de atacado e rotas mais comerciais. Nesta V1 já mostramos a proposta e deixamos o terreno pronto para proteção por senha simples.
-            </p>
-            <div className="mt-4 space-y-3">
-              {premiumCollections.map((item) => (
-                <div key={item} className="rounded-2xl bg-[#f6f7f2] p-4 text-sm leading-6 text-[#4c5549]">
-                  {item}
-                </div>
-              ))}
-            </div>
-            <Link href="/source" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#0a0a0a]">
-              Entrar no Source
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+      <section className="space-y-5">
+        <SectionHeading
+          eyebrow="Guias rápidos"
+          title="O que você precisa saber antes de sair comprando."
+          description="Conteúdos curtos para economizar tempo, evitar erro e aproveitar melhor 1 ou 3 dias de compra."
+        />
+        <div className="grid gap-4 lg:grid-cols-2">
+          {quickGuides.map((guide) => (
+            <GuideCard key={guide.id} guide={guide} />
+          ))}
         </div>
       </section>
 
       <section className="rounded-[32px] border border-black/6 bg-white p-6 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.4)]">
         <SectionHeading
-          eyebrow="Mapa inicial"
-          title="Categorias que já estruturam o MVP"
-          description="As lojas são cadastradas uma única vez e reaproveitadas em categorias, missões, busca e rotas."
+          eyebrow="Posicionamento"
+          title="Nosso foco e simplificar a compra"
+          description="O Frontier Atlas nao quer ser um catalogo infinito. Quer ser a rota mais clara para comprar bem em Ciudad del Este."
         />
         <div className="mt-5 flex flex-wrap gap-3">
           {categories.map((category) => (
@@ -175,14 +207,14 @@ export default async function Home() {
         <div className="mt-6 rounded-[28px] bg-[#0c1510] p-5 text-white shadow-[0_35px_110px_-55px_rgba(39,215,108,0.45)]">
           <div className="flex items-center gap-2 text-[#d9ff1f]">
             <Route className="h-4 w-4" />
-            <p className="text-xs font-black uppercase tracking-[0.18em]">Mapa inteligente</p>
+            <p className="text-xs font-black uppercase tracking-[0.18em]">Sua rota inteligente</p>
           </div>
-          <h3 className="mt-3 text-2xl font-black tracking-[-0.03em]">A cidade agora já pode ser lida por eixos reais de compra.</h3>
+          <h3 className="mt-3 text-2xl font-black tracking-[-0.03em]">Tempo, produto e perfil sao as tres portas de entrada do produto.</h3>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-white/74">
-            Organizamos as lojas visíveis por polos como Shopping China, Jebai Center, Lai Lai Center e San Blás. Isso transforma o Frontier Atlas em assistência de rota, não só em lista de lugares.
+            A diferenca do Frontier Atlas esta em resumir a cidade, priorizar as lojas certas e montar uma rota simples para cada tipo de compra.
           </p>
           <Link href="/mapa" className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#d9ff1f] px-5 py-3 text-sm font-semibold text-[#0a0a0a] transition hover:bg-[#c8ee16]">
-            Abrir mapa inteligente
+            Abrir sua rota inteligente
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

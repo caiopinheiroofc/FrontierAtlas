@@ -13,7 +13,7 @@ export function MissionCard({ mission }: { mission: Mission }) {
       </div>
       <h3 className="text-lg font-bold tracking-[-0.03em] text-[#0a0a0a]">{mission.title}</h3>
       <p className="mt-2 text-sm leading-6 text-[#677264]">{mission.description}</p>
-      <p className="mt-4 text-sm font-semibold text-[#0a0a0a]">Abrir missão</p>
+      <p className="mt-4 text-sm font-semibold text-[#0a0a0a]">Ver rota sugerida</p>
     </Link>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Crosshair, ExternalLink, Navigation, Waves } from "lucide-react";
 import { type SmartMapZoneGroup } from "@/lib/smart-map";
 
 const SCRIPT_ID = "frontier-atlas-google-maps";
@@ -46,6 +47,7 @@ type GoogleSmartMapProps = {
     title: string;
     coordinate: { lat: number; lng: number };
   };
+  customRouteStops?: string[];
 };
 
 type RouteSnapshot = {
@@ -61,11 +63,13 @@ export function GoogleSmartMap({
   customRouteLabel,
   customRouteAccent,
   customOrigin,
+  customRouteStops,
 }: GoogleSmartMapProps) {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [mapError, setMapError] = useState<string | null>(null);
   const [routeError, setRouteError] = useState<string | null>(null);
   const [routeData, setRouteData] = useState<RouteSnapshot | null>(null);
+  const [reframeTick, setReframeTick] = useState(0);
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   const missingApiKey = !apiKey;
 
@@ -95,6 +99,10 @@ export function GoogleSmartMap({
   const canComputeRoute = preferredRoutePoints.length >= 2;
   const visibleRouteData = canComputeRoute ? routeData : null;
   const visibleRouteError = canComputeRoute ? routeError : null;
+  const journeyUrl = useMemo(() => buildGoogleMapsDirectionsUrl(preferredRoutePoints), [preferredRoutePoints]);
+  const navigationStops = customRouteStops?.length
+    ? customRouteStops
+    : activeZone?.stores.map((item) => item.store.name) ?? [];
 
   useEffect(() => {
     if (!canComputeRoute) {
@@ -133,9 +141,7 @@ export function GoogleSmartMap({
   }, [canComputeRoute, preferredRoutePoints]);
 
   useEffect(() => {
-    if (!apiKey) {
-      return;
-    }
+    if (!apiKey) return;
 
     let cancelled = false;
 
@@ -159,7 +165,7 @@ export function GoogleSmartMap({
     return () => {
       cancelled = true;
     };
-  }, [activeZoneSlug, apiKey, canComputeRoute, customOrigin, customRouteAccent, visibleRouteData?.encodedPolyline, zones]);
+  }, [activeZoneSlug, apiKey, canComputeRoute, customOrigin, customRouteAccent, reframeTick, visibleRouteData?.encodedPolyline, zones]);
 
   if (!points.length) {
     return (
@@ -182,7 +188,87 @@ export function GoogleSmartMap({
         </div>
       </div>
 
-      <div ref={mapRef} className="h-[460px] w-full bg-[#edf3e7]" />
+      <div className="relative">
+        <div ref={mapRef} className="h-[520px] w-full bg-[#dfe8da]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 bg-gradient-to-b from-[#08110d]/88 via-[#08110d]/34 to-transparent px-5 pb-14 pt-5 text-white">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="max-w-xl">
+              <p className="text-[11px] font-black uppercase tracking-[0.22em] text-white/64">Modo navegação Frontier</p>
+              <p className="mt-2 text-2xl font-black tracking-[-0.05em]">
+                {customRouteLabel ?? "Rota inteligente ativa"}
+              </p>
+              <p className="mt-2 text-sm text-white/72">
+                Origem operacional, sequência de paradas e deslocamento calculado para comprar com menos atrito.
+              </p>
+            </div>
+            <div className="pointer-events-auto flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setReframeTick((value) => value + 1)}
+                className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur"
+              >
+                <Crosshair className="h-4 w-4" />
+                Reenquadrar
+              </button>
+              {journeyUrl ? (
+                <a
+                  href={journeyUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#d9ff1f] px-4 py-2 text-sm font-semibold text-[#0a0a0a]"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Abrir navegação
+                </a>
+              ) : null}
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute inset-x-4 bottom-4 grid gap-3 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-[28px] border border-white/14 bg-[#09110d]/88 p-4 text-white shadow-[0_25px_80px_-45px_rgba(0,0,0,0.85)] backdrop-blur-md">
+            <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.18em] text-white/62">
+              <Navigation className="h-3.5 w-3.5" />
+              Cockpit da rota
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <RouteMetric
+                label="Tempo estimado"
+                value={visibleRouteData?.duration ? formatDuration(visibleRouteData.duration) : "calculando"}
+              />
+              <RouteMetric
+                label="Percurso"
+                value={visibleRouteData?.distanceMeters ? formatDistance(visibleRouteData.distanceMeters) : "aguardando"}
+              />
+              <RouteMetric label="Paradas" value={String(Math.max(preferredRoutePoints.length - 1, 0))} />
+            </div>
+          </div>
+
+          <div className="rounded-[28px] border border-white/14 bg-white/94 p-4 shadow-[0_25px_80px_-45px_rgba(0,0,0,0.6)]">
+            <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.18em] text-[#6b7280]">
+              <Waves className="h-3.5 w-3.5" />
+              Sequência da missão
+            </div>
+            <div className="mt-3 space-y-2">
+              {(customOrigin ? [customOrigin.title, ...navigationStops] : navigationStops).slice(0, 5).map((stop, index) => (
+                <div key={`${stop}-${index}`} className="flex items-center gap-3 rounded-2xl bg-[#f3f5ef] px-3 py-2 text-sm text-[#22331f]">
+                  <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black ${
+                    index === 0 ? "bg-[#0a0a0a] text-white" : "bg-[#d9ff1f] text-[#0a0a0a]"
+                  }`}>
+                    {index === 0 ? "P" : index}
+                  </span>
+                  <span className="font-semibold">{stop}</span>
+                </div>
+              ))}
+              {(customOrigin ? [customOrigin.title, ...navigationStops] : navigationStops).length > 5 ? (
+                <p className="px-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#6b7280]">
+                  + {(customOrigin ? [customOrigin.title, ...navigationStops] : navigationStops).length - 5} pontos na rota
+                </p>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {missingApiKey ? (
         <div className="border-t border-black/6 bg-[#fff7e8] px-5 py-4 text-sm text-[#7b5b17]">
@@ -386,6 +472,36 @@ function colorFromAccent(accent: string) {
   if (accent.includes("#bef264")) return "#bef264";
   if (accent.includes("#d4d4d8")) return "#d4d4d8";
   return "#27d76c";
+}
+
+function buildGoogleMapsDirectionsUrl(points: Array<{ lat: number; lng: number }>) {
+  if (points.length < 2) return null;
+
+  const origin = `${points[0].lat},${points[0].lng}`;
+  const destination = `${points[points.length - 1].lat},${points[points.length - 1].lng}`;
+  const waypoints = points.slice(1, -1).map((point) => `${point.lat},${point.lng}`).join("|");
+
+  const params = new URLSearchParams({
+    api: "1",
+    origin,
+    destination,
+    travelmode: "driving",
+  });
+
+  if (waypoints) {
+    params.set("waypoints", waypoints);
+  }
+
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+}
+
+function RouteMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/6 px-4 py-3">
+      <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/58">{label}</p>
+      <p className="mt-2 text-lg font-black tracking-[-0.03em] text-white">{value}</p>
+    </div>
+  );
 }
 
 function escapeHtml(value: string) {

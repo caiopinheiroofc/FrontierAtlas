@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "extract:compras-paraguai": "node scripts/extract-compras-paraguai-stores.mjs"
+    "extract:compras-paraguai": "node scripts/extract-compras-paraguai-stores.mjs",
+    "prepare:publish": "bash scripts/prepare-github-publish.sh"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",

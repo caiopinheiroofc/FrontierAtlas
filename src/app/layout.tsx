@@ -14,7 +14,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Frontier Atlas",
-  description: "O mapa inteligente das oportunidades da fronteira.",
+  description: "Sua rota inteligente de compras em Ciudad del Este.",
+  icons: {
+    icon: "/frontier-atlas-symbol.png",
+    shortcut: "/frontier-atlas-symbol.png",
+    apple: "/frontier-atlas-symbol.png",
+  },
 };
 
 export default function RootLayout({
