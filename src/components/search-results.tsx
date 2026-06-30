@@ -9,16 +9,16 @@ import { type Category, type Guide, type Store, type Supplier } from "@/lib/data
 
 export function SearchResults({
   initialQuery = "",
-  stores,
-  guides,
-  suppliers,
-  categories,
+  stores = [],
+  guides = [],
+  suppliers = [],
+  categories = [],
 }: {
   initialQuery?: string;
-  stores: Store[];
-  guides: Guide[];
-  suppliers: Supplier[];
-  categories: Category[];
+  stores?: Store[];
+  guides?: Guide[];
+  suppliers?: Supplier[];
+  categories?: Category[];
 }) {
   const [query, setQuery] = useState(initialQuery);
 
