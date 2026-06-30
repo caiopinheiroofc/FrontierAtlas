@@ -351,8 +351,9 @@ function renderMap(
 
   const googleMaps = (window as GoogleMapsWindow).google;
   if (!googleMaps?.maps) return;
+  const maps = googleMaps.maps;
 
-  const map = new googleMaps.maps.Map(container, {
+  const map = new maps.Map(container, {
     center: { lat: -25.5107, lng: -54.6092 },
     zoom: 16,
     mapTypeControl: false,
@@ -365,8 +366,8 @@ function renderMap(
     ],
   });
 
-  const bounds = new googleMaps.maps.LatLngBounds();
-  const infoWindow = new googleMaps.maps.InfoWindow();
+  const bounds = new maps.LatLngBounds();
+  const infoWindow = new maps.InfoWindow();
 
   zones.forEach((zone) => {
     const path = zone.stores
@@ -375,7 +376,7 @@ function renderMap(
       .map((coordinate) => ({ lat: coordinate!.lat, lng: coordinate!.lng }));
 
     if (path.length >= 2) {
-      new googleMaps.maps.Polyline({
+      new maps.Polyline({
         map,
         path,
         strokeColor: colorFromAccent(zone.accent),
@@ -389,7 +390,7 @@ function renderMap(
       const position = item.coordinate;
       bounds.extend(position);
 
-      const marker = new googleMaps.maps.Marker({
+      const marker = new maps.Marker({
         map,
         position,
         title: item.store.name,
@@ -399,7 +400,7 @@ function renderMap(
           fontWeight: "700",
         },
         icon: {
-          path: googleMaps.maps.SymbolPath.CIRCLE,
+          path: maps.SymbolPath.CIRCLE,
           fillColor: colorFromAccent(zone.accent),
           fillOpacity: 1,
           strokeColor: "#ffffff",
@@ -424,7 +425,7 @@ function renderMap(
   if (customOrigin) {
     bounds.extend(customOrigin.coordinate);
 
-    const originMarker = new googleMaps.maps.Marker({
+    const originMarker = new maps.Marker({
       map,
       position: customOrigin.coordinate,
       title: customOrigin.title,
