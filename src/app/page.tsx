@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, MapPinned, Radar, Route } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { GuideCard } from "@/components/guide-card";
+import { HomeDemoMap } from "@/components/home-demo-map";
 import { MissionCard } from "@/components/mission-card";
 import { SearchInput } from "@/components/search-input";
 import { SectionHeading } from "@/components/section-heading";
@@ -37,6 +38,8 @@ export default async function Home() {
       >
         <SearchInput />
       </form>
+
+      <HomeDemoMap />
 
       <section className="grid gap-4 lg:grid-cols-[1.4fr_0.9fr]">
         <div className="rounded-[34px] bg-[#0a0a0a] p-6 text-white shadow-[0_35px_110px_-55px_rgba(10,10,10,0.9)]">
