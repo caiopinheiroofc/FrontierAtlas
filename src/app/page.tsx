@@ -28,8 +28,8 @@ export default async function Home() {
 
   return (
     <AppShell
-      title="Sua rota inteligente de compras em Ciudad del Este."
-      subtitle="O Frontier Atlas resume as lojas mais importantes e organiza rotas simples para quem quer comprar bem em 1 dia ou em 3 dias."
+      title="As lojas certas, na ordem certa, para você andar menos e comprar melhor."
+      subtitle="O Frontier Atlas organiza sua compra em Ciudad del Este com menos volta, menos cansaço e mais clareza sobre onde realmente vale parar."
     >
       <form
         action="/buscar"
@@ -41,25 +41,25 @@ export default async function Home() {
       <section className="grid gap-4 lg:grid-cols-[1.4fr_0.9fr]">
         <div className="rounded-[34px] bg-[#0a0a0a] p-6 text-white shadow-[0_35px_110px_-55px_rgba(10,10,10,0.9)]">
           <h2 className="max-w-xl text-3xl font-black tracking-[-0.05em] sm:text-5xl">
-            Menos lojas, menos voltas e mais clareza para comprar na CDE.
+            Monte sua rota de compras com menos caminhada e mais acerto.
           </h2>
           <p className="mt-4 max-w-xl text-sm leading-6 text-white/68 sm:text-base">
-            A gente foca no essencial: principais lojas, rotas curtas e
-            orientação simples para turista, primeira viagem e compra
-            objetiva.
+            Em vez de entrar em qualquer loja e andar sem direção, você começa
+            pelo que mais importa: lojas confiáveis, ordem mais inteligente e
+            caminhos mais úteis para comprar melhor.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/mapa"
               className="rounded-full bg-[#d9ff1f] px-5 py-3 text-center text-sm font-semibold text-[#0a0a0a] transition hover:bg-[#c8ee16]"
             >
-              Ver rotas principais
+              Montar rota inteligente
             </Link>
             <Link
               href="/explorar"
               className="rounded-full border border-white/12 bg-white/6 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              Ver lojas essenciais
+              Ver lojas certas
             </Link>
             <Link
               href="/guias"
@@ -79,31 +79,31 @@ export default async function Home() {
               <div className="rounded-2xl bg-[#f6f7f2] p-4">
                 <div className="mb-2 flex items-center gap-2 text-[#0a0a0a]">
                   <Radar className="h-4 w-4" />
-                  <span className="font-semibold">Compra de 1 dia</span>
+                  <span className="font-semibold">Menos caminhada</span>
                 </div>
                 <p className="text-sm leading-6 text-[#667064]">
-                  Foco nas lojas principais para resolver rápido o que mais
-                  vale a pena.
+                  Você evita desvios e começa pelas paradas que mais resolvem a
+                  compra.
                 </p>
               </div>
               <div className="rounded-2xl bg-[#f6f7f2] p-4">
                 <div className="mb-2 flex items-center gap-2 text-[#0a0a0a]">
                   <MapPinned className="h-4 w-4" />
-                  <span className="font-semibold">Compra de 3 dias</span>
+                  <span className="font-semibold">Menos erro</span>
                 </div>
                 <p className="text-sm leading-6 text-[#667064]">
-                  Mais tempo para comparar, dividir a compra por região e
-                  evitar correria.
+                  A rota já te leva primeiro para as lojas mais úteis para o
+                  seu tipo de compra.
                 </p>
               </div>
               <div className="rounded-2xl bg-[#f6f7f2] p-4">
                 <div className="mb-2 flex items-center gap-2 text-[#0a0a0a]">
                   <Route className="h-4 w-4" />
-                  <span className="font-semibold">Lojas essenciais</span>
+                  <span className="font-semibold">Mais compra certa</span>
                 </div>
                 <p className="text-sm leading-6 text-[#667064]">
-                  Menos ruído e mais prioridade nas paradas que realmente
-                  ajudam a compra.
+                  Menos ruído, menos improviso e mais foco no que realmente
+                  vale o seu tempo.
                 </p>
               </div>
             </div>
@@ -113,9 +113,9 @@ export default async function Home() {
 
       <section className="space-y-5">
         <SectionHeading
-          eyebrow="Entradas"
-          title="Escolha como quer montar sua rota"
-          description="O produto comeca por tres perguntas simples: quanto tempo voce tem, o que quer comprar e que tipo de viagem voce vai fazer."
+          eyebrow="Comece por aqui"
+          title="A melhor rota depende do seu tempo, da sua compra e da ordem das lojas."
+          description="Você não precisa ver tudo. Basta começar pela entrada que mais combina com o que quer resolver hoje."
         />
         <div className="grid gap-4 lg:grid-cols-3">
           <div className="rounded-[30px] border border-black/6 bg-white p-6 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.4)]">
@@ -123,11 +123,11 @@ export default async function Home() {
               Por tempo
             </p>
             <h3 className="mt-3 text-2xl font-black tracking-[-0.04em] text-[#0a0a0a]">
-              1 dia ou 3 dias
+              Quanto tempo você tem
             </h3>
             <p className="mt-3 text-sm leading-6 text-[#5e685b]">
-              A forma mais direta para turista: rota curta para resolver o
-              essencial ou rota longa para comparar com calma.
+              Se a ideia é resolver rápido, a rota precisa cortar caminhada
+              desnecessária e priorizar o que tem mais chance de compra.
             </p>
             <Link
               href="/mapa"
@@ -143,11 +143,11 @@ export default async function Home() {
               Por produto
             </p>
             <h3 className="mt-3 text-2xl font-black tracking-[-0.04em] text-[#0a0a0a]">
-              O que voce quer comprar
+              O que você quer comprar
             </h3>
             <p className="mt-3 text-sm leading-6 text-[#5e685b]">
-              Entre por eletronicos, perfumes, casa ou games e veja primeiro
-              as lojas que mais ajudam nessa compra.
+              Eletrônicos, perfumes, casa ou games: a ordem das lojas muda
+              bastante dependendo do produto que você procura.
             </p>
             <Link
               href="/explorar?mission=eletronicos"
@@ -163,11 +163,11 @@ export default async function Home() {
               Por perfil
             </p>
             <h3 className="mt-3 text-2xl font-black tracking-[-0.04em] text-[#0a0a0a]">
-              Seu tipo de viagem
+              Seu jeito de comprar
             </h3>
             <p className="mt-3 text-sm leading-6 text-[#5e685b]">
-              Primeira viagem, compra rapida, revenda ou compra em familia. O
-              foco muda e a rota tambem.
+              Primeira viagem, compra rápida, revenda ou compra em família. O
+              foco muda, e a rota ideal também.
             </p>
             <Link
               href="/explorar?mission=primeira-viagem"
@@ -183,14 +183,14 @@ export default async function Home() {
       <section className="grid gap-4 lg:grid-cols-2">
         <div className="rounded-[30px] border border-black/6 bg-white p-6 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.4)]">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#6b7280]">
-            Rota de 1 dia
+            Rota mais curta
           </p>
           <h3 className="mt-3 text-2xl font-black tracking-[-0.04em] text-[#0a0a0a]">
-            Resolver o principal sem perder tempo
+            Resolva o principal sem andar além do necessário
           </h3>
           <p className="mt-3 text-sm leading-6 text-[#5e685b]">
-            Ideal para quem vai e volta no mesmo dia, com foco em eletrônicos,
-            perfumes e lojas de confiança.
+            Ideal para quem quer comprar o essencial com menos volta, menos
+            desgaste e mais chance de acertar nas primeiras paradas.
           </p>
           <Link
             href="/mapa"
@@ -203,14 +203,14 @@ export default async function Home() {
 
         <div className="rounded-[30px] border border-black/6 bg-white p-6 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.4)]">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#6b7280]">
-            Rota de 3 dias
+            Rota com comparação
           </p>
           <h3 className="mt-3 text-2xl font-black tracking-[-0.04em] text-[#0a0a0a]">
-            Comprar com mais comparação e calma
+            Compare melhor sem transformar a compra num labirinto
           </h3>
           <p className="mt-3 text-sm leading-6 text-[#5e685b]">
-            Melhor para quem quer dividir a compra por regiões, comparar
-            melhor e explorar mais categorias sem pressa.
+            Quando você tem mais tempo, a rota continua importando para evitar
+            cansaço à toa e separar melhor cada região da compra.
           </p>
           <Link
             href="/explorar"
@@ -225,8 +225,8 @@ export default async function Home() {
       <section className="space-y-5">
         <SectionHeading
           eyebrow="Missões"
-          title="As missões mais úteis para a maioria das viagens"
-          description="Começamos pelo essencial para ajudar quem precisa comprar bem em pouco tempo."
+          title="Entradas rápidas para começar pela missão certa"
+          description="Essas missões ajudam a transformar uma intenção solta em uma rota mais objetiva desde o começo."
         />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {essentialMissions.map((mission) => (
@@ -238,8 +238,8 @@ export default async function Home() {
       <section className="space-y-5">
         <SectionHeading
           eyebrow="Lojas principais"
-          title="As lojas que mais ajudam a compra"
-          description="Uma seleção mais enxuta das paradas mais úteis para turista, primeira viagem e compras rápidas."
+          title="As paradas que mais ajudam você a comprar melhor"
+          description="Uma seleção mais enxuta das lojas que resolvem mais, cansam menos e fazem mais sentido para começar."
         />
         <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
           {featuredStores.map((store) => (
@@ -251,8 +251,8 @@ export default async function Home() {
       <section className="rounded-[32px] border border-black/6 bg-white p-6 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.4)]">
         <SectionHeading
           eyebrow="Lojas essenciais"
-          title="Um atalho para quem quer começar pelo que mais importa"
-          description="Essas sao as paradas mais importantes para montar uma rota simples e eficiente na cidade."
+          title="Comece por quem mais resolve a sua compra"
+          description="Essas são as paradas mais úteis para ganhar tempo, reduzir erro e montar uma rota simples na cidade."
         />
         <div className="mt-5 grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
           {essentialStores.map((store) => (
@@ -274,8 +274,8 @@ export default async function Home() {
       <section className="space-y-5">
         <SectionHeading
           eyebrow="Guias rápidos"
-          title="O que você precisa saber antes de sair comprando."
-          description="Conteúdos curtos para economizar tempo, evitar erro e aproveitar melhor 1 ou 3 dias de compra."
+          title="O que vale saber antes de sair andando e comprando."
+          description="Conteúdos curtos para evitar erro, economizar energia e aproveitar melhor o tempo da sua rota."
         />
         <div className="grid gap-4 lg:grid-cols-2">
           {quickGuides.map((guide) => (
@@ -287,8 +287,8 @@ export default async function Home() {
       <section className="rounded-[32px] border border-black/6 bg-white p-6 shadow-[0_25px_80px_-55px_rgba(10,10,10,0.4)]">
         <SectionHeading
           eyebrow="Categorias"
-          title="O essencial já organizado"
-          description="As principais categorias já estão prontas para facilitar busca, comparação e rota."
+          title="Tudo já filtrado para você decidir com mais clareza"
+          description="As principais categorias já estão organizadas para facilitar busca, comparação e uma rota mais inteligente."
         />
         <div className="mt-5 flex flex-wrap gap-3">
           {categories.map((category) => (
@@ -308,12 +308,12 @@ export default async function Home() {
             </p>
           </div>
           <h3 className="mt-3 text-2xl font-black tracking-[-0.03em]">
-            A cidade foi resumida no que mais importa para comprar.
+            Menos volta, menos cansaço e mais chance de comprar certo.
           </h3>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-white/74">
-            Em vez de abrir dezenas de opções, o Frontier Atlas destaca os
-            eixos mais úteis e as paradas mais necessárias para uma viagem
-            mais enxuta.
+            Em vez de abrir dezenas de opções sem contexto, o Frontier Atlas
+            destaca as lojas certas, na ordem mais útil, para você fazer uma
+            compra mais prática e objetiva.
           </p>
           <Link
             href="/mapa"

@@ -72,7 +72,7 @@ export function AppShell({
             <div className="max-w-2xl">
               <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white/70">
                 <span className="h-2 w-2 rounded-full bg-[#27d76c]" />
-                Guia prático para comprar melhor em Ciudad del Este
+                Menos caminhada, mais compra certa em Ciudad del Este
               </p>
               <h1 className="text-3xl font-black tracking-[-0.04em] sm:text-5xl">
                 {title}
