@@ -9,7 +9,7 @@ const items = [
   { href: "/mapa", label: "Mapa", icon: MapPinned },
   { href: "/explorar", label: "Explorar", icon: Map },
   { href: "/guias", label: "Guias", icon: Radar },
-  { href: "/buscar", label: "Buscar", icon: Search },
+  { href: "/buscar", label: "Rota", icon: Search },
 ];
 
 export function BottomNav() {
