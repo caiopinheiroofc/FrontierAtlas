@@ -236,6 +236,22 @@ create table if not exists profiles (
   updated_at timestamptz default now()
 );
 
+create table if not exists subscription_webhook_events (
+  id bigint generated always as identity primary key,
+  provider text not null,
+  event_name text,
+  event_status text,
+  customer_email text,
+  matched_role text check (matched_role in ('PRO', 'BUSINESS')),
+  external_order_id text,
+  external_transaction_id text,
+  processing_status text not null,
+  error_message text,
+  payload jsonb not null,
+  created_at timestamptz default now(),
+  processed_at timestamptz
+);
+
 create index if not exists stores_status_idx on stores (status);
 create index if not exists stores_slug_idx on stores (slug);
 create index if not exists suppliers_status_idx on suppliers (status);
@@ -247,6 +263,9 @@ create index if not exists exchange_houses_status_idx on exchange_houses (status
 create index if not exists parking_status_idx on parking (status);
 create index if not exists collections_status_idx on collections (status);
 create index if not exists profiles_role_idx on profiles (role);
+create index if not exists subscription_webhook_events_provider_idx on subscription_webhook_events (provider);
+create index if not exists subscription_webhook_events_customer_email_idx on subscription_webhook_events (customer_email);
+create index if not exists subscription_webhook_events_processing_status_idx on subscription_webhook_events (processing_status);
 
 alter table categories enable row level security;
 alter table stores enable row level security;
@@ -258,6 +277,7 @@ alter table exchange_houses enable row level security;
 alter table parking enable row level security;
 alter table collections enable row level security;
 alter table profiles enable row level security;
+alter table subscription_webhook_events enable row level security;
 
 drop policy if exists "Public can read active categories" on categories;
 create policy "Public can read active categories"
