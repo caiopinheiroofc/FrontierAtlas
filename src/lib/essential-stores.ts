@@ -13,8 +13,8 @@ export const essentialStoreSlugs = [
   "mega-vestcasa",
 ] as const;
 
-const essentialStoreOrder = new Map(
-  essentialStoreSlugs.map((slug, index) => [slug, index]),
+const essentialStoreOrder = new Map<string, number>(
+  essentialStoreSlugs.map((slug, index) => [slug, index] as [string, number]),
 );
 
 export function getEssentialStores(stores: Store[]) {
