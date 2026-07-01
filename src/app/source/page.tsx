@@ -1,14 +1,11 @@
 import { Lock, ShieldCheck, Star } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { BusinessAccess } from "@/components/business-access";
 import { SectionHeading } from "@/components/section-heading";
-import { SubscriptionCTA } from "@/components/subscription-cta";
-import { SupplierCard } from "@/components/supplier-card";
-import { getDefaultUserSubscriptionState } from "@/lib/subscription";
 import { getSuppliers } from "@/lib/frontier-data";
 
 export default async function SourcePage() {
   const suppliers = await getSuppliers();
-  const subscriptionState = getDefaultUserSubscriptionState();
   return (
     <AppShell
       title="Frontier Business: fornecedores, margem e compra profissional."
@@ -37,20 +34,7 @@ export default async function SourcePage() {
         title="Fornecedores iniciais por segmento"
         description="Aqui entram os contatos e atalhos de margem que fazem sentido para atacado, revenda e compra profissional."
       />
-
-      <SubscriptionCTA
-        title="Conheca o Frontier Atlas Business"
-        description="A camada Business existe para transformar o Atlas em ferramenta comercial, com fornecedores, rotas de atacado e novas oportunidades para quem compra com objetivo de margem."
-        plan="BUSINESS"
-        buttonLabel="Conhecer Frontier Business"
-        userRole={subscriptionState.role}
-      />
-
-      <div className="grid gap-5 lg:grid-cols-2">
-        {suppliers.map((supplier) => (
-          <SupplierCard key={supplier.id} supplier={supplier} />
-        ))}
-      </div>
+      <BusinessAccess suppliers={suppliers} />
     </AppShell>
   );
 }

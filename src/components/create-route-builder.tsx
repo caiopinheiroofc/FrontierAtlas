@@ -14,10 +14,10 @@ import { SubscriptionCTA } from "@/components/subscription-cta";
 import {
   canUseSmartRoute,
   FREE_SMART_ROUTE_LIMIT,
-  getDefaultUserSubscriptionState,
   getRemainingFreeRoutes,
   type UserSubscriptionState,
 } from "@/lib/subscription";
+import { useAuth } from "@/components/auth-provider";
 
 const suggestionChips = [
   "iPhone",
@@ -50,11 +50,15 @@ export function CreateRouteBuilder({
   stores: Store[];
   initialQuery?: string;
 }) {
+  const { effectiveRole, user } = useAuth();
   const [shoppingList, setShoppingList] = useState(initialQuery);
   const [time, setTime] = useState<RouteTime>("expressa");
   const [mobility, setMobility] = useState<RouteMobility>("a-pe");
   const [subscriptionState, setSubscriptionState] =
-    useState<UserSubscriptionState>(getDefaultUserSubscriptionState);
+    useState<UserSubscriptionState>({
+      role: effectiveRole,
+      completedSmartRoutes: 0,
+    });
   const [routeUnlocked, setRouteUnlocked] = useState(false);
 
   const route = useMemo(
@@ -65,33 +69,39 @@ export function CreateRouteBuilder({
   const items = parseShoppingList(shoppingList);
   const remainingFreeRoutes = getRemainingFreeRoutes(subscriptionState);
   const smartRouteLocked = !canUseSmartRoute(subscriptionState);
-
-  useEffect(() => {
-    const rawState =
-      typeof window !== "undefined"
-        ? window.localStorage.getItem("frontier-atlas-subscription-state")
-        : null;
-
-    if (!rawState) return;
-
-    try {
-      const parsed = JSON.parse(rawState) as UserSubscriptionState;
-      if (parsed?.role) {
-        setSubscriptionState(parsed);
-      }
-    } catch {
-      return;
-    }
-  }, []);
+  const storageKey = user
+    ? `frontier-atlas-subscription-state:${user.id}`
+    : "frontier-atlas-subscription-state:guest";
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    window.localStorage.setItem(
-      "frontier-atlas-subscription-state",
-      JSON.stringify(subscriptionState),
-    );
-  }, [subscriptionState]);
+    const rawState = window.localStorage.getItem(storageKey);
+
+    if (!rawState) {
+      setSubscriptionState({
+        role: effectiveRole,
+        completedSmartRoutes: 0,
+      });
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(rawState) as UserSubscriptionState;
+      setSubscriptionState({
+        role: effectiveRole,
+        completedSmartRoutes: parsed?.completedSmartRoutes ?? 0,
+      });
+    } catch {
+      return;
+    }
+  }, [effectiveRole, storageKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    window.localStorage.setItem(storageKey, JSON.stringify(subscriptionState));
+  }, [storageKey, subscriptionState]);
 
   useEffect(() => {
     setRouteUnlocked(false);

@@ -227,6 +227,15 @@ create table if not exists collections (
   updated_at timestamptz default now()
 );
 
+create table if not exists profiles (
+  id uuid primary key references auth.users (id) on delete cascade,
+  email text not null unique,
+  full_name text,
+  role text not null default 'FREE' check (role in ('FREE', 'PRO', 'BUSINESS')),
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
 create index if not exists stores_status_idx on stores (status);
 create index if not exists stores_slug_idx on stores (slug);
 create index if not exists suppliers_status_idx on suppliers (status);
@@ -237,6 +246,7 @@ create index if not exists hotels_status_idx on hotels (status);
 create index if not exists exchange_houses_status_idx on exchange_houses (status);
 create index if not exists parking_status_idx on parking (status);
 create index if not exists collections_status_idx on collections (status);
+create index if not exists profiles_role_idx on profiles (role);
 
 alter table categories enable row level security;
 alter table stores enable row level security;
@@ -247,6 +257,7 @@ alter table hotels enable row level security;
 alter table exchange_houses enable row level security;
 alter table parking enable row level security;
 alter table collections enable row level security;
+alter table profiles enable row level security;
 
 drop policy if exists "Public can read active categories" on categories;
 create policy "Public can read active categories"
@@ -310,3 +321,19 @@ on collections
 for select
 to anon, authenticated
 using (status in ('active', 'review'));
+
+grant select, insert on table profiles to authenticated;
+
+drop policy if exists "Users can read own profile" on profiles;
+create policy "Users can read own profile"
+on profiles
+for select
+to authenticated
+using ((select auth.uid()) = id);
+
+drop policy if exists "Users can create own profile" on profiles;
+create policy "Users can create own profile"
+on profiles
+for insert
+to authenticated
+with check ((select auth.uid()) = id);
