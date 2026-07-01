@@ -7,6 +7,7 @@ import { GoogleSmartMap } from "@/components/google-smart-map";
 import {
   smartMapMissionRoutes,
   smartMapOrigins,
+  type SmartMapStore,
   type SmartMapZoneGroup,
 } from "@/lib/smart-map";
 
@@ -50,12 +51,15 @@ export function SmartMapClient({ zones }: { zones: SmartMapZoneGroup[] }) {
     smartMapOrigins.find((origin) => origin.slug === selectedMission.recommendedOriginSlug) ?? smartMapOrigins[0] ?? null;
 
   const routeStores = useMemo(
-    () => selectedMission.storeSlugs.map((slug) => storeMap.get(slug)).filter(Boolean),
+    () =>
+      selectedMission.storeSlugs
+        .map((slug) => storeMap.get(slug))
+        .filter((item): item is SmartMapStore => item !== undefined),
     [selectedMission.storeSlugs, storeMap],
   );
 
   const routePoints = useMemo(() => {
-    const points = [];
+    const points: Array<{ lat: number; lng: number }> = [];
     if (currentOrigin) {
       points.push(currentOrigin.coordinate);
     }
